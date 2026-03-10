@@ -1,0 +1,214 @@
+/**
+ * WebSocket Service
+ * Real-time updates for ambulances, emergencies, and system events
+ */
+
+import { io, Socket } from 'socket.io-client';
+import { getAccessToken } from './api';
+import toast from 'react-hot-toast';
+
+type EventCallback = (data: any) => void;
+
+class WebSocketService {
+  private ambulanceSocket: Socket | null = null;
+  private emergencySocket: Socket | null = null;
+  private isConnected = false;
+
+  /**
+   * Connect to WebSocket services
+   */
+  connect() {
+    if (this.isConnected) {
+      return;
+    }
+
+    const token = getAccessToken();
+    const auth = token ? { auth: { token } } : {};
+
+    try {
+      // Connect to Ambulance Service WebSocket
+      this.ambulanceSocket = io('http://localhost:5002', {
+        ...auth,
+        transports: ['websocket'],
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 5,
+      });
+
+      // Connect to Emergency Service WebSocket
+      this.emergencySocket = io('http://localhost:5001', {
+        ...auth,
+        transports: ['websocket'],
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 5,
+      });
+
+      // Setup connection handlers
+      this.setupConnectionHandlers();
+      this.isConnected = true;
+    } catch (error) {
+      console.error('WebSocket connection error:', error);
+    }
+  }
+
+  /**
+   * Setup connection event handlers
+   */
+  private setupConnectionHandlers() {
+    // Ambulance socket handlers
+    if (this.ambulanceSocket) {
+      this.ambulanceSocket.on('connect', () => {
+        console.log('✅ Connected to Ambulance WebSocket');
+      });
+
+      this.ambulanceSocket.on('disconnect', () => {
+        console.log('❌ Disconnected from Ambulance WebSocket');
+      });
+
+      this.ambulanceSocket.on('connect_error', (error) => {
+        console.error('Ambulance WebSocket error:', error);
+      });
+    }
+
+    // Emergency socket handlers
+    if (this.emergencySocket) {
+      this.emergencySocket.on('connect', () => {
+        console.log('✅ Connected to Emergency WebSocket');
+      });
+
+      this.emergencySocket.on('disconnect', () => {
+        console.log('❌ Disconnected from Emergency WebSocket');
+      });
+
+      this.emergencySocket.on('connect_error', (error) => {
+        console.error('Emergency WebSocket error:', error);
+      });
+    }
+  }
+
+  /**
+   * Subscribe to ambulance location updates
+   */
+  onAmbulanceLocationUpdate(callback: EventCallback) {
+    if (this.ambulanceSocket) {
+      this.ambulanceSocket.on('location_update', callback);
+    }
+  }
+
+  /**
+   * Subscribe to ambulance status updates
+   */
+  onAmbulanceStatusUpdate(callback: EventCallback) {
+    if (this.ambulanceSocket) {
+      this.ambulanceSocket.on('status_update', callback);
+    }
+  }
+
+  /**
+   * Subscribe to new emergencies
+   */
+  onNewEmergency(callback: EventCallback) {
+    if (this.emergencySocket) {
+      this.emergencySocket.on('emergency_created', (data) => {
+        callback(data);
+        toast.success(`New ${data.severity} emergency reported!`);
+      });
+    }
+  }
+
+  /**
+   * Subscribe to emergency status updates
+   */
+  onEmergencyStatusUpdate(callback: EventCallback) {
+    if (this.emergencySocket) {
+      this.emergencySocket.on('emergency_status_update', callback);
+    }
+  }
+
+  /**
+   * Subscribe to emergency assignments
+   */
+  onEmergencyAssignment(callback: EventCallback) {
+    if (this.emergencySocket) {
+      this.emergencySocket.on('emergency_assigned', (data) => {
+        callback(data);
+        toast('Emergency assignment updated', { icon: 'ℹ️' });
+      });
+    }
+  }
+
+  /**
+   * Emit ambulance location update (for drivers)
+   */
+  updateAmbulanceLocation(ambulanceId: string, latitude: number, longitude: number) {
+    if (this.ambulanceSocket) {
+      this.ambulanceSocket.emit('update_location', {
+        ambulance_id: ambulanceId,
+        latitude,
+        longitude,
+        timestamp: new Date().toISOString(),
+      });
+    }
+  }
+
+  /**
+   * Join emergency room (for real-time updates on specific emergency)
+   */
+  joinEmergencyRoom(emergencyId: string) {
+    if (this.emergencySocket) {
+      this.emergencySocket.emit('join_emergency', { emergency_id: emergencyId });
+    }
+  }
+
+  /**
+   * Leave emergency room
+   */
+  leaveEmergencyRoom(emergencyId: string) {
+    if (this.emergencySocket) {
+      this.emergencySocket.emit('leave_emergency', { emergency_id: emergencyId });
+    }
+  }
+
+  /**
+   * Disconnect all sockets
+   */
+  disconnect() {
+    if (this.ambulanceSocket) {
+      this.ambulanceSocket.disconnect();
+      this.ambulanceSocket = null;
+    }
+
+    if (this.emergencySocket) {
+      this.emergencySocket.disconnect();
+      this.emergencySocket = null;
+    }
+
+    this.isConnected = false;
+  }
+
+  /**
+   * Remove all event listeners
+   */
+  removeAllListeners() {
+    if (this.ambulanceSocket) {
+      this.ambulanceSocket.removeAllListeners();
+    }
+
+    if (this.emergencySocket) {
+      this.emergencySocket.removeAllListeners();
+    }
+  }
+
+  /**
+   * Check connection status
+   */
+  getConnectionStatus() {
+    return {
+      ambulance: this.ambulanceSocket?.connected || false,
+      emergency: this.emergencySocket?.connected || false,
+    };
+  }
+}
+
+export const websocketService = new WebSocketService();

@@ -1,0 +1,248 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database with PostGIS
+  postgres:
+    image: postgis/postgis:15-3.3-alpine
+    container_name: mediroutex-postgres
+    environment:
+      POSTGRES_DB: mediroutex
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-Admin@123}
+      POSTGRES_HOST_AUTH_METHOD: md5
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d mediroutex"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediroutex-network
+
+  # Redis Cache & Pub/Sub
+  redis:
+    image: redis:7-alpine
+    container_name: mediroutex-redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-Redis@123}
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediroutex-network
+
+  # Emergency Service
+  emergency-service:
+    build: ./backend/services/emergency-service
+    container_name: mediroutex-emergency-service
+    environment:
+      NODE_ENV: development
+      PORT: 5001
+      DATABASE_URL: postgresql://admin:${DB_PASSWORD:-Admin@123}@postgres:5432/mediroutex
+      REDIS_URL: redis://:${REDIS_PASSWORD:-Redis@123}@redis:6379
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      API_VERSION: v1
+    ports:
+      - "5001:5001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/services/emergency-service:/app
+      - /app/node_modules
+    command: npm run dev
+    networks:
+      - mediroutex-network
+
+  # Ambulance Service
+  ambulance-service:
+    build: ./backend/services/ambulance-service
+    container_name: mediroutex-ambulance-service
+    environment:
+      NODE_ENV: development
+      PORT: 5002
+      DATABASE_URL: postgresql://admin:${DB_PASSWORD:-Admin@123}@postgres:5432/mediroutex
+      REDIS_URL: redis://:${REDIS_PASSWORD:-Redis@123}@redis:6379
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+    ports:
+      - "5002:5002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/services/ambulance-service:/app
+      - /app/node_modules
+    command: npm run dev
+    networks:
+      - mediroutex-network
+
+  # Hospital Service
+  hospital-service:
+    build: ./backend/services/hospital-service
+    container_name: mediroutex-hospital-service
+    environment:
+      NODE_ENV: development
+      PORT: 5003
+      DATABASE_URL: postgresql://admin:${DB_PASSWORD:-Admin@123}@postgres:5432/mediroutex
+      REDIS_URL: redis://:${REDIS_PASSWORD:-Redis@123}@redis:6379
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+    ports:
+      - "5003:5003"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/services/hospital-service:/app
+      - /app/node_modules
+    command: npm run dev
+    networks:
+      - mediroutex-network
+
+  # User/Auth Service
+  user-service:
+    build: ./backend/services/user-service
+    container_name: mediroutex-user-service
+    environment:
+      NODE_ENV: development
+      PORT: 5004
+      DATABASE_URL: postgresql://admin:${DB_PASSWORD:-Admin@123}@postgres:5432/mediroutex
+      REDIS_URL: redis://:${REDIS_PASSWORD:-Redis@123}@redis:6379
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      JWT_EXPIRES_IN: 24h
+      REFRESH_TOKEN_EXPIRES_IN: 7d
+    ports:
+      - "5004:5004"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/services/user-service:/app
+      - /app/node_modules
+    command: npm run dev
+    networks:
+      - mediroutex-network
+
+  # Routing Service
+  routing-service:
+    build: ./backend/services/routing-service
+    container_name: mediroutex-routing-service
+    environment:
+      NODE_ENV: development
+      PORT: 5005
+      DATABASE_URL: postgresql://admin:${DB_PASSWORD:-Admin@123}@postgres:5432/mediroutex
+      REDIS_URL: redis://:${REDIS_PASSWORD:-Redis@123}@redis:6379
+      MAPBOX_ACCESS_TOKEN: ${MAPBOX_ACCESS_TOKEN}
+      GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
+    ports:
+      - "5005:5005"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/services/routing-service:/app
+      - /app/node_modules
+    command: npm run dev
+    networks:
+      - mediroutex-network
+
+  # ML Prediction Service (Python/FastAPI)
+  ml-service:
+    build: ./ml-service
+    container_name: mediroutex-ml-service
+    environment:
+      ENVIRONMENT: development
+      PORT: 8000
+      DATABASE_URL: postgresql://admin:${DB_PASSWORD:-Admin@123}@postgres:5432/mediroutex
+      REDIS_URL: redis://:${REDIS_PASSWORD:-Redis@123}@redis:6379
+      MODEL_PATH: /app/models
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./ml-service:/app
+      - ml_models:/app/models
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - mediroutex-network
+
+  # Frontend (React)
+  frontend:
+    build: 
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: mediroutex-frontend
+    environment:
+      VITE_API_BASE_URL: http://localhost:5001
+      VITE_EMERGENCY_SERVICE_URL: http://localhost:5001
+      VITE_AMBULANCE_SERVICE_URL: http://localhost:5002
+      VITE_HOSPITAL_SERVICE_URL: http://localhost:5003
+      VITE_USER_SERVICE_URL: http://localhost:5004
+      VITE_ROUTING_SERVICE_URL: http://localhost:5005
+      VITE_ML_SERVICE_URL: http://localhost:8000
+      VITE_MAPBOX_TOKEN: ${VITE_MAPBOX_TOKEN}
+      VITE_WEBSOCKET_URL: ws://localhost:5001
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - /app/node_modules
+    command: npm run dev
+    networks:
+      - mediroutex-network
+
+  # Nginx Reverse Proxy (Optional, for production-like setup)
+  nginx:
+    image: nginx:alpine
+    container_name: mediroutex-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./infrastructure/nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - emergency-service
+      - ambulance-service
+      - hospital-service
+      - user-service
+      - routing-service
+      - ml-service
+    networks:
+      - mediroutex-network
+
+networks:
+  mediroutex-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  ml_models:
+    driver: local
