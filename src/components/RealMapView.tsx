@@ -155,10 +155,10 @@ export default function RealMapView() {
 
         {/* Ambulance Markers */}
         {showLayers.ambulances && ambulances.map((ambulance) => (
-          ambulance.location_lat && ambulance.location_lng && (
+          ambulance.current_location_lat && ambulance.current_location_lng && (
             <Marker
               key={ambulance.id}
-              position={[ambulance.location_lat, ambulance.location_lng]}
+              position={[ambulance.current_location_lat, ambulance.current_location_lng]}
               icon={getAmbulanceIcon(ambulance.status)}
             >
               <Popup>

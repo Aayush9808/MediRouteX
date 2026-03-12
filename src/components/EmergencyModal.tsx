@@ -16,13 +16,48 @@ export default function EmergencyModal({ isOpen, onClose }: EmergencyModalProps)
     gender: '',
     type: 'Medical',
     severity: 'Medium' as 'Critical' | 'High' | 'Medium' | 'Low',
-    location: ''
+    location: '',
+    phone: ''
   });
+  const [useCurrentLocation, setUseCurrentLocation] = useState(false);
+  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+
+  const getCurrentLocation = () => {
+    setUseCurrentLocation(true);
+    if (navigator.geolocation) {
+      toast.loading('Getting your location...');
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCoordinates({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+          toast.dismiss();
+          toast.success('Location acquired!');
+        },
+        (error) => {
+          toast.dismiss();
+          toast.error('Could not get location. Using default.');
+          // Default to Greater Noida area
+          setCoordinates({ lat: 28.4744, lng: 77.4943 });
+        }
+      );
+    } else {
+      setCoordinates({ lat: 28.4744, lng: 77.4943 });
+      toast.success('Using default location');
+    }
+  };
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Use coordinates or generate random ones in Greater Noida area
+    const finalCoords = coordinates || {
+      lat: 28.4700 + (Math.random() - 0.5) * 0.02,
+      lng: 77.4900 + (Math.random() - 0.5) * 0.02
+    };
     
     addEmergency({
       patientName: formData.patientName,
@@ -30,10 +65,15 @@ export default function EmergencyModal({ isOpen, onClose }: EmergencyModalProps)
       gender: formData.gender,
       type: formData.type,
       severity: formData.severity,
-      location: formData.location
+      location: formData.location,
+      reporter_phone: formData.phone || '+91-9999999999',
+      location_lat: finalCoords.lat,
+      location_lng: finalCoords.lng,
+      location_address: formData.location,
+      description: `${formData.type} emergency reported`
     });
     
-    toast.success('Emergency reported successfully!');
+    toast.success('Emergency reported successfully! Dispatching nearest ambulance...');
     onClose();
     
     // Reset form
@@ -43,8 +83,11 @@ export default function EmergencyModal({ isOpen, onClose }: EmergencyModalProps)
       gender: '',
       type: 'Medical',
       severity: 'Medium',
-      location: ''
+      location: '',
+      phone: ''
     });
+    setCoordinates(null);
+    setUseCurrentLocation(false);
   };
 
   return (
@@ -144,11 +187,39 @@ export default function EmergencyModal({ isOpen, onClose }: EmergencyModalProps)
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Location
             </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                required
+                value={formData.location}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                placeholder="Enter address or use GPS"
+                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-[#0A1628] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="button"
+                onClick={getCurrentLocation}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 whitespace-nowrap"
+              >
+                📍 GPS
+              </button>
+            </div>
+            {coordinates && (
+              <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                ✓ GPS Location acquired: {coordinates.lat.toFixed(4)}, {coordinates.lng.toFixed(4)}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Contact Phone
+            </label>
             <input
-              type="text"
-              required
-              value={formData.location}
-              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+              type="tel"
+              value={formData.phone}
+              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              placeholder="+91-9999999999"
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-[#0A1628] text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
             />
           </div>

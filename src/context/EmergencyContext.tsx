@@ -369,6 +369,25 @@ export function EmergencyProvider({ children }: { children: ReactNode }) {
   const activeEmergencies = emergencies.filter(e => e.status !== 'Completed').length;
   const avgResponseTime = 8.5; // Can be fetched from ML service
 
+  // Simulate ambulance movement for demo
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAmbulances(prev => prev.map(amb => {
+        // Only move busy ambulances slightly to simulate movement
+        if (amb.status === 'Busy' && amb.current_location_lat && amb.current_location_lng) {
+          return {
+            ...amb,
+            current_location_lat: amb.current_location_lat + (Math.random() - 0.5) * 0.001,
+            current_location_lng: amb.current_location_lng + (Math.random() - 0.5) * 0.001
+          };
+        }
+        return amb;
+      }));
+    }, 5000); // Update every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Load initial data
   useEffect(() => {
     loadInitialData();
