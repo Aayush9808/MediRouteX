@@ -5,155 +5,167 @@
 
 ## 🎬 **PRESENTATION SCRIPT (7-8 Minutes)**
 
-### **[0:00-0:20] OPENING - AAYUSH (20 seconds)**
+### **[0:00-1:45] OPENING + INTRODUCTION + PROPOSED SOLUTION - AAYUSH (1 minute 45 seconds)**
 
 **[Aayush shares screen with poster visible]**
 
 **AAYUSH:**
 > "Good morning everyone! I'm **Aayush Kumar Shrivastav**, team leader of **Team CSE-M-056**. This is our project **MediRouteX** - an AI-powered emergency medical dispatch system.
 >
-> My teammates are **Ronak Saini**, **Soumya Goel**, **Dushyant Dubey**, and **Sanskar Mishra**. We are from different branches of 3rd Year, Batch 2023-27, working under the guidance of **Ms. Paramjeet Kaur**. Let's begin!"
-
-**[Point to Introduction section on poster]**
+> My teammates are **Ronak Saini**, **Soumya Goel**, **Dushyant Dubey**, and **Sanskar Mishra**. We are from different branches of 3rd Year, Batch 2023-27, working under the guidance of **Ms. Paramjeet Kaur**.
+>
+> **[Point to Introduction section]**
+>
+> Let me explain the problem. India faces significant challenges in emergency medical response. We have **1,68,000 road accident deaths annually**. Hospital resource information is scattered, and there's limited coordination between hospitals. Emergency response times average **20-30 minutes**, and only about **18% of patients receive proper pre-hospital care**. Additionally, India faces a **blood shortage affecting 2 million units annually**.
+>
+> **[Point to Proposed Idea/Solution section]**
+>
+> Our project, **MediRouteX**, is an AI-powered emergency response management system designed to address these challenges. Here are our key system features:
+>
+> First, we have **AI-based Ambulance Dispatch System** with real-time GPS tracking. Second, **Live Hospital Capacity Monitoring** showing available beds across ICU, Emergency, and General wards. Third, **Emergency Blood Availability Alert Network** that broadcasts urgent requirements. Fourth, **Machine Learning-based ETA and demand prediction**. Fifth, a **Smart Routing Algorithm** that considers traffic conditions. And sixth, a **Centralized Emergency Coordination Platform** with real-time data visualization.
+>
+> Our system workflow starts when an emergency happens - the dispatcher inputs patient details, our smart system proposes optimal ambulance and hospital assignments, blood availability alerts are sent if required, real-time ambulance tracking shows progress, and finally the patient reaches the most suitable hospital.
+>
+> Now, let me hand over to Ronak to explain our project objectives."
 
 ---
 
-### **[0:20-1:20] INTRODUCTION - AAYUSH (1 minute)**
-
-**AAYUSH:**
-> "**[Point to statistics]** India records over **1,68,000 road accident deaths annually**. Ambulance response time averages **20-30 minutes** - way beyond the critical Golden Hour. Only **18% of patients receive pre-hospital care**. Manual dispatch takes **5-8 minutes**. Blood shortage: **2 million units annually**.
->
-> **[Point to solution]** **MediRouteX** solves this with:
-> - **30-second GPS dispatch** - 90% faster
-> - **Real-time hospital bed visibility**
-> - **Intelligent routing algorithms**
-> - **Blood network** connecting 50+ hospitals
-> - **ML-powered predictive analytics**
->
-> Impact: **120-200 lives saved per city annually**, 70-80% faster blood procurement. Now, Ronak will explain our objectives."
-
----
-
-### **[1:20-2:20] OBJECTIVES - RONAK (1 minute)**
+### **[1:45-2:45] OBJECTIVES - RONAK (1 minute)**
 
 **RONAK:**
-> "Hi, I'm **Ronak Saini**. **My role:** PostgreSQL database with 8 tables and 25+ indexes, **Ambulance Service** for GPS tracking, and **Routing Service** using Haversine distance formula.
+> "Thank you, Aayush. Hello everyone, I'm **Ronak Saini**. 
 >
-> **[Point to Objectives]** Five objectives:
+> **My role in this project:** I was responsible for designing and implementing the **PostgreSQL database** with 8 tables and 25+ indexes for fast query performance. I also developed the **Ambulance Service** that tracks GPS locations in real-time and the **Routing Service** that calculates optimal ambulance and hospital selection using the Haversine distance formula.
 >
-> **1. Automated Dispatch:** GPS-based assignment in under 30 seconds using Haversine formula.
+> **[Point to Objectives section]**
 >
-> **2. Hospital Intelligence:** Live bed data across ICU, Emergency, General wards for 50+ hospitals with specialty matching.
+> Now let me explain our five main objectives:
 >
-> **3. Blood Network:** Broadcast alerts for all 8 blood types within 50km radius, reducing procurement from 2-4 hours to 20-45 minutes.
+> **Objective 1:** Reduce emergency response time by automating ambulance dispatch - selecting available ambulances based on GPS location.
 >
-> **4. Predictive ML:** Random Forest for demand forecasting, Gradient Boosting for ETA prediction, K-Means for ambulance positioning.
+> **Objective 2:** Provide real-time hospital resource visibility including ICU, Emergency, and General bed availability.
 >
-> **5. Scalable Architecture:** 6 microservices with PostgreSQL and Redis.
+> **Objective 3:** Enable rapid blood availability coordination by broadcasting emergency blood needs to nearby hospitals and blood banks.
 >
-> Success metrics: 99.9% uptime, sub-200ms response, 500+ concurrent emergencies. Now, Soumya on technologies."
+> **Objective 4:** Predict ambulance arrival time using machine learning models based on distance, traffic conditions, and historical data.
+>
+> **Objective 5:** Improve coordination between emergency services, hospitals, and trauma centers through our unified digital platform. We also aim to develop a scalable system that can support smart cities and large-scale emergency networks.
+>
+> Now, Soumya will explain the technologies we used."
 
 ---
 
-### **[2:20-3:20] TECHNOLOGIES USED - SOUMYA (1 minute)**
+### **[2:45-3:45] TECHNOLOGIES USED - SOUMYA (1 minute)**
 
 **SOUMYA:**
-> "Hi, I'm **Soumya Goel**. **My role:** **Authentication Service** with JWT and role-based access, **Hospital Service** managing bed tracking, blood inventory for all 8 blood types, and broadcast network alerting all hospitals instantly.
+> "Thank you, Ronak. Hi everyone, I'm **Soumya Goel**.
 >
-> **[Point to Technologies]**
+> **My role:** I built the **Authentication Service** with JWT tokens and role-based access control, and developed the complete **Hospital Service** which manages bed tracking across all wards, handles blood inventory for all 8 blood types, and implements the blood emergency broadcast network that can alert multiple hospitals instantly.
 >
-> **Frontend:** React 18 + TypeScript, Vite, Leaflet.js maps, Socket.io for real-time, Tailwind CSS.
+> **[Point to Technologies Used section]**
 >
-> **Backend:** Node.js 20 + Express in TypeScript. 6 microservices on ports 5001-5006.
+> Let me walk you through our technology stack across six categories:
 >
-> **ML:** Python 3.11 + FastAPI, scikit-learn, Pandas, NumPy.
+> **Frontend - User Interface:** We used React 18 with TypeScript for type safety, Vite as our build tool, and Leaflet.js for interactive maps. Socket.io enables real-time communication and Tailwind CSS provides responsive design.
 >
-> **Database:** PostgreSQL 15 with 8 tables and 25+ indexes. Redis 8 for Pub/Sub and caching.
+> **Backend - Core Services:** Built on Node.js 20 with Express framework, also in TypeScript. We have 6 independent microservices - Emergency, Ambulance, Hospital, Auth, Routing, and ML services.
 >
-> **DevOps:** Docker, Nginx, Git/GitHub, JWT, bcrypt.
+> **Database & Caching:** PostgreSQL 15 as our primary database with optimized indexes. Redis 8 handles real-time messaging, Pub/Sub, and caching.
 >
-> Total: **70,000+ lines of code**. Now, Dushyant on impact."
+> **Machine Learning - Predictive:** Python 3.11 with FastAPI, using scikit-learn for our ML models, Pandas for data processing, and NumPy for numerical computations.
+>
+> **Algorithms - Routing & Distance:** We implemented Haversine distance formula and Dijkstra's algorithm for optimal routing.
+>
+> **DevOps - Deployment & Infrastructure:** Docker for containerization, Nginx as reverse proxy, and Git/GitHub for version control. We use JWT for authentication and bcrypt for password security.
+>
+> In total, we've written over **70,000 lines of code** across all these technologies. Now, Dushyant will explain the impact and benefits."
 
 ---
 
-### **[3:20-4:20] IMPACT AND BENEFITS - DUSHYANT (1 minute)**
+### **[3:45-4:45] IMPACT AND BENEFITS - DUSHYANT (1 minute)**
 
 **DUSHYANT:**
-> "Hi, I'm **Dushyant Dubey**. **My role:** Complete React frontend - dashboard with real-time emergency board, Leaflet.js maps showing live ambulance positions, emergency and hospital interfaces, plus Docker containerization.
+> "Thank you, Soumya. Hi everyone, I'm **Dushyant Dubey**.
 >
-> **[Point to Impact]**
+> **My role:** I handled all the frontend development - building the complete React dashboard with real-time emergency board, interactive Leaflet.js maps showing live ambulance positions, the emergency management interface, and hospital management screens. I also set up our Docker containerization and deployment infrastructure.
 >
-> **Societal Impact:** **120-200 lives saved per city annually** - 20-30% faster response. Blood network prevents 25-35 deaths monthly.
+> **[Point to Impact and Benefits section]**
 >
-> **Healthcare Benefits:** Automates dispatch, eliminates 5-8 minute delay. Real-time bed visibility prevents overcrowding. Integrates 80+ hospitals.
+> Let me explain the impact and benefits across four key areas:
 >
-> **Economic Impact:** ₹2.86-4.89 crores saved per city yearly. 18-25% fuel reduction, 140-287 tons less CO2.
+> **Societal Impact:** Our system can significantly reduce emergency response times by 20-40%, which research shows can improve survival chances. Faster trauma response means more lives saved. Our blood network can prevent deaths by reducing blood procurement time from hours to minutes, potentially preventing 25-35 deaths per month per city.
 >
-> **Data Insights:** Helps planners identify hotspots and optimize ambulance placement. Now, Sanskar on SDGs."
+> **Healthcare System Benefits:** We automate the dispatch process, eliminating the 5-8 minute manual delay. Real-time hospital bed visibility reduces overcrowding. Our predictive analytics helps with staff scheduling. The integrated blood network connects 80+ hospitals in a coordinated system, ensuring better resource utilization.
+>
+> **Economic and Operational Impact:** Smart routing can reduce ambulance fuel consumption by 18-25%, leading to significant cost savings and reduced maintenance. Better resource utilization across the system means optimized healthcare operational costs.
+>
+> **Data-Driven Policy:** Our system provides valuable insights - hospitals can analyze emergency trends, city planners can identify hotspots, and authorities can optimize ambulance station placement using our data.
+>
+> Now, Sanskar will explain our alignment with Sustainable Development Goals and our roadmap."
 
 ---
 
-### **[4:20-5:20] SUSTAINABLE DEVELOPMENT GOALS - SANSKAR (1 minute)**
+### **[4:45-5:45] SDGs + ROADMAP - SANSKAR (1 minute)**
 
 **SANSKAR:**
-> "Hi, I'm **Sanskar Mishra**. **My role:** All documentation - system design, ER diagrams, API specs. **ML Service** in Python and FastAPI, frontend components, and trained all three ML models - Random Forest for demand forecasting, Gradient Boosting for ETA prediction, K-Means for positioning.
+> "Thank you, Dushyant. Hi everyone, I'm **Sanskar Mishra**.
 >
-> **[Point to SDGs]**
+> **My role:** I created all the project documentation including system design documents, ER diagrams, and API specifications. I also developed the **ML Service** using Python and FastAPI, built frontend components for hospital and ambulance management, and most importantly, I trained all three machine learning models - Random Forest for demand forecasting, Gradient Boosting for ETA prediction, and K-Means for optimal ambulance positioning.
 >
-> **SDG 3 - Good Health:** Target 3.6 - halve traffic deaths by 2030. Our 20-30% faster response reduces preventable deaths.
+> **[Point to SDGs section]**
 >
-> **SDG 9 - Innovation:** Pioneering microservices in healthcare. Open-source for replication.
+> Let me explain how MediRouteX aligns with UN Sustainable Development Goals:
 >
-> **SDG 11 - Sustainable Cities:** 18-25% fuel reduction, 140-287 tons less CO2 annually.
+> **SDG 3 - Good Health and Well-Being:** We directly support Target 3.6 to reduce traffic deaths, and Target 3.8 for universal health coverage by ensuring equitable ambulance dispatch.
 >
-> **SDG 17 - Partnerships:** Unifies government, hospitals, blood banks, tech partners.
+> **SDG 9 - Industry, Innovation, and Infrastructure:** We're pioneering microservices architecture in healthcare with AI and ML integration. We plan to make this open-source for replication by other cities.
 >
-> Now, Aayush will show our implementation and demo."
+> **SDG 11 - Sustainable Cities and Communities:** Our smart routing reduces fuel consumption by 18-25%, cutting CO2 emissions. Our data helps urban planners improve emergency access.
+>
+> **SDG 17 - Partnerships for the Goals:** We bring together government ambulance services, private hospitals, blood banks, and technology partners in one unified platform.
+>
+> **[Point to Roadmap section]**
+>
+> Now, our implementation roadmap has three phases:
+>
+> **Phase 1 - System Design & Planning:** We defined requirements, designed system architecture using microservices, created database schema, and set up the development environment with version control.
+>
+> **Phase 2 - Core System Development:** We developed all six microservices, implemented REST APIs with real-time communication using WebSocket, integrated routing algorithms for ambulance GPS tracking and hospital selection, built the complete React frontend, and implemented blood availability alert management.
+>
+> **Phase 3 - AI Integration, Testing & Deployment:** We trained machine learning models, conducted end-to-end system integration testing, containerized deployment using Docker, performed performance and security validation, and prepared documentation and presentation.
+>
+> Now, Aayush will summarize our contributions and show you our working demo."
 
 ---
 
-### **[5:20-6:50] SOLUTION ARCHITECTURE & ROADMAP - AAYUSH (1.5 minutes)**
+### **[5:45-7:30] TEAM CONTRIBUTIONS + DEMO + CLOSING - AAYUSH (1 minute 45 seconds)**
 
 **AAYUSH:**
-> "As **project leader**, I designed the system architecture, defined API contracts, coordinated the team. Built **Emergency Service** - the core handling complete emergency lifecycle with WebSocket for real-time updates. Integrated all 6 microservices, set up Redis Pub/Sub, and trained ML models with Sanskar.
+> "Thank you, Sanskar.
 >
-> **[Point to Architecture]** 4-tier design:
+> Let me summarize everyone's contributions to this project. **Ronak** designed and implemented our entire database infrastructure with 8 tables and 25+ indexes, developed the Ambulance Service for real-time GPS tracking, and built the Routing Service with intelligent algorithms using Haversine distance formula.
 >
-> **Tier 1:** React frontend with real-time maps and dashboards.
-> **Tier 2:** Nginx as API gateway and load balancer.
-> **Tier 3:** 6 Microservices on ports 5001-5006 - Emergency, Ambulance, Hospital, Auth, Routing, ML.
-> **Tier 4:** PostgreSQL and Redis for data.
+> **Soumya** created the Authentication Service with JWT and role-based access control, developed the complete Hospital Service managing bed tracking and blood inventory, and implemented the blood emergency broadcast network.
 >
-> **[Point to Roadmap]** 3-month implementation:
+> **Dushyant** built our entire React frontend - the dashboard, interactive maps, and all user interfaces, plus set up our Docker containerization and deployment infrastructure.
 >
-> **Month 1:** I designed architecture. Ronak set up database. Soumya built auth. Dushyant configured Docker. Sanskar created documentation.
+> **Sanskar** handled all documentation including system design and API specifications, developed the ML Service in Python, and trained all three machine learning models.
 >
-> **Month 2:** Parallel development - I built Emergency Service. Ronak did Ambulance and Routing. Soumya did Hospital Service and blood network. Dushyant created entire frontend. Sanskar built ML Service. **70,478 lines of code.**
->
-> **Month 3:** Sanskar and I trained 3 ML models. Ronak and Soumya did testing. Dushyant deployed Docker. All prepared presentation.
->
-> **Result:** Production-ready system - 99.9% uptime, sub-200ms response, 500+ concurrent emergencies.
->
-> **[Gesture confidently]** Now, with **my contribution at around 50% of the project**, let me show you our **working demo**.
+> As the **team leader**, I designed the overall system architecture, defined all API contracts, coordinated the team, built the **Emergency Service** which is the core of our system handling the complete emergency lifecycle with WebSocket for real-time updates, and integrated all 6 microservices together using Redis Pub/Sub messaging.
 >
 > **[Switch screen from poster to localhost:3001]**
 >
-> Here's our live system - real OpenStreetMap showing Greater Noida, 5 ambulances with live GPS, 3 active emergencies, 5 hospitals with bed data. Watch as I request an ambulance...
+> Now let me show you our working system. Here's our live dashboard with real OpenStreetMap showing Greater Noida area. You can see 5 ambulances on the map - green markers show available ambulances, red shows busy ones. We have 3 active emergencies and 5 hospitals with their bed availability data. The left sidebar shows real-time statistics.
 >
-> **[Brief demo - 15 seconds max]**
+> **[Click on ambulance marker]** When I click on an ambulance, you can see detailed information - registration number, driver, equipment, and current location.
 >
-> System is ready for pilot deployment. Future: AWS cloud, mobile apps, multi-city expansion."
-
----
-
-### **[6:50-7:10] CLOSING - AAYUSH (20 seconds)**
-
-**[Switch back to poster]**
-
-**AAYUSH:**
-> "To conclude, MediRouteX can save lives. This was a true team effort where **Ronak** built our database and routing algorithms, **Soumya** created the authentication and blood network, **Dushyant** developed the entire frontend and deployment infrastructure, and **Sanskar** handled all documentation and machine learning models. I coordinated the team and built the core emergency services that integrate everything together.
+> **[Click REQUEST AMBULANCE button]** Now watch - when someone requests an ambulance, I'll fill in the patient details... and click this GPS button to capture location... Submit. The system automatically selects the nearest available ambulance, updates the emergency status to 'Dispatched', and the ambulance marker changes color. You can see the stats updating in real-time. All this happens very quickly compared to traditional manual dispatch.
 >
-> Our system is ready for real-world pilot deployment. Thank you for your time and attention. We're now open to any questions!"
+> **[Switch back to poster]**
+>
+> To conclude, MediRouteX is more than a technical project - it's a solution that can help save lives in emergency situations. This was a true team effort where each member had specific responsibilities and we worked together to build a comprehensive system.
+>
+> We've developed a working prototype that demonstrates the core functionality, and we're ready to further develop and deploy this system. Thank you for your time and attention. We're now open to any questions!"
 
 **[All team members wave]**
 
@@ -163,37 +175,39 @@
 
 ## 📝 **SPEAKER NOTES & TIPS**
 
-### **For Aayush (Leader - 3:10 minutes total):**
-- Handle architecture, roadmap, and **LIVE DEMO**
-- **YOUR ROLE:** Emergency Service, WebSocket, integration, 50% of project
-- Mention "50% contribution" before demo
-- **DEMO TRANSITION:** Switch from poster to localhost:3001
-- Show: Real map, ambulances, emergencies, request ambulance (15 seconds)
-- Switch back to poster for closing
+### **For Aayush (Leader - 3:30 minutes total):**
+- **Opening + Intro + Proposed Solution (1:45):** Start with team intro, explain problem clearly from poster Introduction section, then cover all 6 key system features from Proposed Idea/Solution
+- **Team Summary + Demo + Closing (1:45):** Summarize each member's role briefly, switch to demo, show key features (ambulance click, request emergency, GPS button), switch back to poster for closing
+- Point to relevant poster sections throughout
+- Keep demo concise but impactful
 
 ### **For Ronak (1 minute):**
-- **YOUR ROLE:** Database, Ambulance Service, Routing Service
-- Start with your role (10 seconds), then objectives (50 seconds)
-- Speak clearly and point to poster
-- Confidence tip: Your routing algorithms power the system!
+- Start with brief self-intro and YOUR ROLE (10 seconds)
+- Cover all 5 objectives from poster (50 seconds)
+- Speak clearly, don't rush
+- Point to Objectives section on poster
+- Confidence tip: Your database and routing power the entire system!
 
 ### **For Soumya (1 minute):**
-- **YOUR ROLE:** Auth Service, Hospital Service, Blood Network
-- Start with your role (10 seconds), then tech stack (50 seconds)
-- List technologies concisely
-- Confidence tip: Your blood network saves lives!
+- Start with brief self-intro and YOUR ROLE (10 seconds)
+- Cover all 6 technology categories from poster (50 seconds)
+- Mention the 70,000+ lines of code
+- Point to Technologies Used section
+- Confidence tip: Your auth and hospital services are critical!
 
 ### **For Dushyant (1 minute):**
-- **YOUR ROLE:** Complete frontend, Docker deployment
-- Start with your role (10 seconds), then impact numbers (50 seconds)
-- Emphasize big numbers: "120-200 LIVES"
-- Confidence tip: Your UI makes everything accessible!
+- Start with brief self-intro and YOUR ROLE (10 seconds)
+- Cover all 4 impact areas from poster: Societal, Healthcare, Economic, Data-driven (50 seconds)
+- Emphasize real-world benefits
+- Point to Impact and Benefits section
+- Confidence tip: Your frontend makes everything accessible!
 
 ### **For Sanskar (1 minute):**
-- **YOUR ROLE:** Documentation, ML Service, ML models
-- Start with your role (10 seconds), then SDGs (50 seconds)
-- Point to 4 SDG icons
-- Confidence tip: Your ML predicts emergencies!
+- Start with brief self-intro and YOUR ROLE (10 seconds)
+- Cover all 4 SDGs from poster (20 seconds)
+- Cover all 3 phases of roadmap briefly (30 seconds)
+- Point to SDGs and Roadmap sections
+- Confidence tip: Your ML and documentation complete the system!
 
 ---
 
@@ -234,23 +248,24 @@
 
 | Section | Speaker | Duration | Cumulative |
 |---------|---------|----------|-----------|
-| Opening | Aayush | 0:20 | 0:20 |
-| Introduction | Aayush | 1:00 | 1:20 |
-| Objectives + Role | Ronak | 1:00 | 2:20 |
-| Technologies + Role | Soumya | 1:00 | 3:20 |
-| Impact + Role | Dushyant | 1:00 | 4:20 |
-| SDGs + Role | Sanskar | 1:00 | 5:20 |
-| Solution & Demo + Role | Aayush | 1:30 | 6:50 |
-| Closing | Aayush | 0:20 | 7:10 |
+| Opening + Intro + Proposed Solution | Aayush | 1:45 | 1:45 |
+| Objectives + Role | Ronak | 1:00 | 2:45 |
+| Technologies + Role | Soumya | 1:00 | 3:45 |
+| Impact & Benefits + Role | Dushyant | 1:00 | 4:45 |
+| SDGs + Roadmap + Role | Sanskar | 1:00 | 5:45 |
+| Team Summary + Demo + Closing | Aayush | 1:45 | 7:30 |
 
-**Total Duration:** 7 minutes 10 seconds ✅
+**Total Duration:** 7 minutes 30 seconds ✅
 
-**Work Distribution:**
-- Aayush (Leader): ~50% (3:10 minutes) - Opening, Intro, Architecture, Demo, Closing
-- Ronak: 14% (1:00) - Database, Ambulance, Routing + Objectives
-- Soumya: 14% (1:00) - Auth, Hospital, Blood Network + Technologies
-- Dushyant: 14% (1:00) - Frontend, Docker + Impact
-- Sanskar: 14% (1:00) - Documentation, ML Service, Models + SDGs
+**Content Coverage from Poster:**
+- ✅ Introduction (Aayush)
+- ✅ Proposed Idea/Solution (Aayush)
+- ✅ Objectives (Ronak)
+- ✅ Technologies Used (Soumya)
+- ✅ Impact and Benefits (Dushyant)
+- ✅ SDGs (Sanskar)
+- ✅ Roadmap (Sanskar)
+- ✅ Live Demo (Aayush)
 
 ---
 
@@ -263,9 +278,16 @@
 
 **Video Specifications:**
 - Format: MP4 or MOV
-- Length: 7-8 minutes (target: 7:10 min ✅)
+- Length: 7-8 minutes (target: 7:30 min ✅)
 - Quality: 720p or 1080p
 - Audio: Clear and audible
-- Content: All 5 members speaking + poster + live demo
+- Content: All 5 members speaking + poster sections covered + live demo
 
-**For Practice:** Do 2-3 practice runs before final recording to get comfortable with timing and demo transition.
+**Important Notes:**
+- Script syncs with all poster sections
+- No unrealistic claims (no 99.99% uptime promises)
+- Project presented as working prototype, not fully deployed
+- Demo shows core functionality
+- Each member explains their role + poster section
+
+**For Practice:** Do 2-3 practice runs before final recording to get comfortable with timing, poster transitions, and demo flow.
