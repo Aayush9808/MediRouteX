@@ -10,9 +10,9 @@
 **[Aayush shares screen with poster visible]**
 
 **AAYUSH:**
-> "Good morning everyone! I'm **Aayush Kumar Shrivastav**, team leader. This is **MediRouteX** - an AI-powered emergency medical dispatch system.
+> "Good morning everyone! I'm **Aayush Kumar Shrivastav**, team leader of **Team CSE-M-056**. This is our project **MediRouteX** - an AI-powered emergency medical dispatch system.
 >
-> My team: **Ronak Saini**, **Soumya Goel**, **Dushyant Dubey**, and **Sanskar Mishra**. CSE 3rd Year, Batch 2023-27, guided by **Ms. Paramjeet Kaur**. Let's begin!"
+> My teammates are **Ronak Saini**, **Soumya Goel**, **Dushyant Dubey**, and **Sanskar Mishra**. We are from different branches of 3rd Year, Batch 2023-27, working under the guidance of **Ms. Paramjeet Kaur**. Let's begin!"
 
 **[Point to Introduction section on poster]**
 
@@ -151,9 +151,9 @@
 **[Switch back to poster]**
 
 **AAYUSH:**
-> "MediRouteX can save lives. Team effort: Ronak - database and routing. Soumya - auth and blood network. Dushyant - frontend and deployment. Sanskar - documentation and ML. I coordinated and built core services.
+> "To conclude, MediRouteX can save lives. This was a true team effort where **Ronak** built our database and routing algorithms, **Soumya** created the authentication and blood network, **Dushyant** developed the entire frontend and deployment infrastructure, and **Sanskar** handled all documentation and machine learning models. I coordinated the team and built the core emergency services that integrate everything together.
 >
-> Ready for real-world deployment. Thank you! Open to questions."
+> Our system is ready for real-world pilot deployment. Thank you for your time and attention. We're now open to any questions!"
 
 **[All team members wave]**
 
