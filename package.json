@@ -9,14 +9,17 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@types/leaflet": "^1.9.21",
     "axios": "^1.13.6",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^11.15.0",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.469.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "react-hot-toast": "^2.6.0",
+    "react-leaflet": "^4.2.1",
     "recharts": "^2.12.0",
     "socket.io-client": "^4.8.3",
     "tailwind-merge": "^2.6.0"

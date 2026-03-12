@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import Navigation from './components/Navigation';
 import LeftSidebar from './components/LeftSidebar';
-import MapView from './components/MapView';
+import RealMapView from './components/RealMapView';
 import RightSidebar from './components/RightSidebar';
 import BloodBankPanel from './components/BloodBankPanel';
 import EmergencyModal from './components/EmergencyModal';
@@ -87,7 +87,7 @@ function MainApp() {
                   transition={{ duration: 0.3, delay: 0.1 }}
                   className="flex-1 relative"
                 >
-                  <MapView />
+                  <RealMapView />
                 </motion.div>
 
                 <motion.div
@@ -107,7 +107,7 @@ function MainApp() {
           {/* Mobile Layout */}
           {isMobile && (
             <div className="flex-1 relative">
-              <MapView />
+              <RealMapView />
               <MobileNav onEmergency={() => setShowEmergencyModal(true)} />
             </div>
           )}
