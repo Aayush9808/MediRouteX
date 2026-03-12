@@ -76,12 +76,16 @@
 
 ---
 
-### **[2:00-3:00] OBJECTIVES - RONAK (1 minute)**
+### **[2:00-3:15] OBJECTIVES - RONAK (1 minute 15 seconds)**
 
 **[Ronak speaks, Aayush keeps poster visible on objectives section]**
 
 **RONAK:**
-> "Thank you, Aayush. Hi everyone, I'm **Ronak Saini**, and I'll explain our project objectives.
+> "Thank you, Aayush. Hi everyone, I'm **Ronak Saini**.
+>
+> **My role in this project:** I was responsible for setting up our entire database infrastructure - I designed the PostgreSQL schema with 8 tables and 25+ indexes. I also developed the **Ambulance Service** that tracks GPS locations and the **Routing Service** that calculates optimal ambulance and hospital selection using Haversine distance formula.
+>
+> Now let me explain our project objectives.
 >
 > **[Point to Objectives section]**
 >
@@ -103,12 +107,16 @@
 
 ---
 
-### **[3:00-4:00] TECHNOLOGIES USED - SOUMYA (1 minute)**
+### **[3:15-4:30] TECHNOLOGIES USED - SOUMYA (1 minute 15 seconds)**
 
 **[Soumya speaks, poster on Technologies section]**
 
 **SOUMYA:**
-> "Hi everyone, I'm **Soumya Goel**, and I'll walk you through our technology stack.
+> "Hi everyone, I'm **Soumya Goel**.
+>
+> **My role in this project:** I built the **Authentication Service** with JWT tokens and role-based access control, and I developed the complete **Hospital Service** - which manages bed tracking across ICU, Emergency, and General wards, handles blood inventory for all 8 blood types, and implements the blood emergency broadcast network that alerts all hospitals instantly.
+>
+> Now let me walk you through our technology stack.
 >
 > **[Point to Technologies section on poster]**
 >
@@ -134,12 +142,16 @@
 
 ---
 
-### **[4:00-5:00] IMPACT AND BENEFITS - DUSHYANT (1 minute)**
+### **[4:30-5:45] IMPACT AND BENEFITS - DUSHYANT (1 minute 15 seconds)**
 
 **[Dushyant speaks, poster on Impact section]**
 
 **DUSHYANT:**
-> "Thank you, Soumya. Hi, I'm **Dushyant Dubey**, and I'll explain the impact and benefits of MediRouteX.
+> "Thank you, Soumya. Hi, I'm **Dushyant Dubey**.
+>
+> **My role in this project:** I handled all the frontend development - I built the entire React dashboard with real-time emergency board, interactive maps using Leaflet.js showing live ambulance positions, the emergency management interface, and hospital management screens. I also set up our complete Docker containerization and deployment infrastructure.
+>
+> Now let me explain the impact and benefits of MediRouteX.
 >
 > **[Point to Societal Impact]**
 >
@@ -163,12 +175,16 @@
 
 ---
 
-### **[5:00-6:00] SUSTAINABLE DEVELOPMENT GOALS - SANSKAR (1 minute)**
+### **[5:45-7:00] SUSTAINABLE DEVELOPMENT GOALS - SANSKAR (1 minute 15 seconds)**
 
 **[Sanskar speaks, poster on SDGs section]**
 
 **SANSKAR:**
-> "Hi everyone, I'm **Sanskar Mishra**, and I'll explain how MediRouteX aligns with the United Nations Sustainable Development Goals.
+> "Hi everyone, I'm **Sanskar Mishra**.
+>
+> **My role in this project:** I created all the project documentation - system design documents, ER diagrams, and API specifications. I also developed the **ML Service** using Python and FastAPI, and I built the frontend components for hospital and ambulance management. Most importantly, I trained all three machine learning models - the Random Forest for demand forecasting, Gradient Boosting for ETA prediction, and K-Means for ambulance positioning.
+>
+> Now let me explain how MediRouteX aligns with the United Nations Sustainable Development Goals.
 >
 > **[Point to SDG 3 icon]**
 >
@@ -192,12 +208,16 @@
 
 ---
 
-### **[6:00-8:00] SOLUTION ARCHITECTURE & ROADMAP - AAYUSH (2 minutes)**
+### **[7:00-9:00] SOLUTION ARCHITECTURE & ROADMAP - AAYUSH (2 minutes)**
 
 **[Aayush continues, moves to Solution and Roadmap sections]**
 
 **AAYUSH:**
-> "Thank you, Sanskar. Let me now explain our system architecture and how we built this in just 3 months.
+> "Thank you, Sanskar. 
+>
+> As the **project leader and lead developer**, my role was to design the overall system architecture, define all API contracts, and coordinate the team. I built the **Emergency Service** - which is the core of our system - handling the complete emergency lifecycle with WebSocket integration for real-time updates. I also integrated all 6 microservices together, set up the Redis Pub/Sub messaging system, and worked with Sanskar to train and integrate the ML models.
+>
+> Let me now explain our system architecture and how we built this in just 3 months.
 >
 > **[Point to Proposed Solution architecture diagram]**
 >
@@ -221,11 +241,11 @@
 >
 > Now, our implementation roadmap. With 5 team members, we completed this in 3 months:
 >
-> **Month 1** was Design and Setup. We divided the work - I handled architecture design and API contracts. Ronak set up the database schema. Soumya built the authentication service. Dushyant configured our development environment and Docker. And Sanskar created all our documentation and diagrams. By end of month 1, we had our complete architecture, database, and auth service ready.
+> **Month 1** was Design and Setup. We divided the work clearly - I handled system architecture design and API contracts. **Ronak** set up the PostgreSQL database with complete schema. **Soumya** built the authentication service with JWT. **Dushyant** configured our development environment and Docker. And **Sanskar** created all our documentation and diagrams. By end of month 1, we had our complete architecture, database, and auth service ready.
 >
-> **Month 2** was Core Development, and this is where we worked in parallel. I built the Emergency Service with WebSocket integration. Ronak developed the Ambulance and Routing services. Soumya built the Hospital Service and blood network. Dushyant created our entire React frontend with maps and dashboards. And Sanskar built the ML Service and frontend components. In this month, we wrote 70,478 lines of code.
+> **Month 2** was Core Development, and this is where we worked in parallel for maximum efficiency. I built the **Emergency Service** with WebSocket integration - the heart of our system. **Ronak** developed the **Ambulance Service** for GPS tracking and the **Routing Service** with intelligent algorithms. **Soumya** built the **Hospital Service** including the blood network that broadcasts alerts. **Dushyant** created our entire React frontend - the dashboard, maps, and all user interfaces. And **Sanskar** built the ML Service and additional frontend components. In this month alone, we wrote 70,478 lines of code.
 >
-> **Month 3** was ML, Testing, and Deployment. Sanskar and I trained our three ML models - Random Forest achieving 1.8 MAE for demand forecasting, Gradient Boosting with 2.7 minutes RMSE for ETA prediction, and K-Means identifying 10 optimal ambulance positions. Ronak and Soumya handled integration testing and security audits. Dushyant set up Docker deployment. And we all worked together on presentation preparation.
+> **Month 3** was ML, Testing, and Deployment. **Sanskar** and I trained our three ML models together - Random Forest achieving 1.8 MAE for demand forecasting, Gradient Boosting with 2.7 minutes RMSE for ETA prediction, and K-Means identifying 10 optimal ambulance positions. **Ronak** and **Soumya** handled all integration testing and security audits. **Dushyant** set up complete Docker deployment with 7 containers. And we all worked together on this presentation preparation.
 >
 > **[Gesture to overall poster]**
 >
@@ -238,14 +258,14 @@
 
 ---
 
-### **[8:00-8:30] CLOSING - AAYUSH (30 seconds)**
+### **[9:00-9:30] CLOSING - AAYUSH (30 seconds)**
 
 **AAYUSH:**
 > "To conclude, MediRouteX is more than just a technical project - it's a solution that can save lives. By reducing emergency response times, optimizing blood procurement, and enabling data-driven healthcare decisions, we're contributing to a future where no one dies waiting for an ambulance.
 >
 > **[Point to team names on poster]**
 >
-> This was truly a team effort. Each member contributed their expertise - from backend development to frontend design, from ML models to deployment infrastructure.
+> This was truly a team effort where each member had clear responsibilities. Ronak built our database and routing algorithms. Soumya created the authentication and hospital blood network. Dushyant developed our entire frontend and deployment. Sanskar handled documentation and machine learning. And I coordinated everything while building the core emergency service and integrations.
 >
 > **[Face camera]**
 >
@@ -261,38 +281,49 @@
 
 ### **For Aayush (Leader - 4 minutes total):**
 - You handle the complex technical parts: architecture, development process, ML details
+- **YOUR ROLE:** Emergency Service, WebSocket, integration, system architecture
 - Speak confidently about the codebase since you built most of it
 - Use specific numbers: 70,478 lines, 6 microservices, 42,500 backend lines
 - Point to poster sections while speaking
 - Control the pace - you're the anchor
 
-### **For Ronak (1 minute):**
-- Focus on WHAT the objectives are, not HOW they work technically
+### **For Ronak (1 minute 15 seconds):**
+- **YOUR ROLE:** Database schema, Ambulance Service, Routing Service
+- Start by explaining what YOU built (15 seconds)
+- Then focus on WHAT the objectives are, not HOW they work technically
 - Read the objectives clearly and slowly
 - Point to each objective on poster as you mention it
-- You don't need to explain algorithms in depth - just mention them
-- Confidence tip: You're just listing our goals, which is straightforward!
+- Mention your routing algorithms when explaining Objective 1
+- Confidence tip: You built the database and routing - that's impressive!
 
-### **For Soumya (1 minute):**
-- List the technologies like you're reading a shopping list
+### **For Soumya (1 minute 15 seconds):**
+- **YOUR ROLE:** Authentication Service, Hospital Service, Blood Network
+- Start by explaining what YOU built (15 seconds)
+- Then list the technologies like you're reading a shopping list
 - Don't worry about explaining what each tech does in detail
 - Point to the technology logos on the poster
 - Mention the big number: "70,000+ lines of code"
-- Confidence tip: Just read the tech stack - no need to be an expert on each!
+- Connect Auth Service and Hospital Service to the tech stack
+- Confidence tip: You built the blood network - a life-saving feature!
 
-### **For Dushyant (1 minute):**
+### **For Dushyant (1 minute 15 seconds):**
+- **YOUR ROLE:** Complete frontend, Docker deployment
+- Start by explaining what YOU built (15 seconds)
 - Focus on the IMPACT numbers - lives saved, money saved, efficiency gains
 - These are the "so what?" benefits that non-technical people understand
 - Point to each impact category as you speak
 - Use emphasis on big numbers: "120-200 LIVES" "₹4.89 CRORES saved"
-- Confidence tip: You're sharing the good news - the benefits!
+- Mention how your UI makes these benefits possible
+- Confidence tip: You built what users see and interact with!
 
-### **For Sanskar (1 minute):**
+### **For Sanskar (1 minute 15 seconds):**
+- **YOUR ROLE:** Documentation, ML Service, ML models, frontend components
+- Start by explaining what YOU built (15 seconds)
 - SDGs are simple - just explain how we help each goal
 - Point to the 4 SDG icons on poster (3, 9, 11, 17)
 - Connect each SDG to one simple benefit
-- This is the "why it matters globally" section
-- Confidence tip: You're explaining how we help the world - feel proud!
+- Mention your ML models achieved great accuracy
+- Confidence tip: You trained AI models that predict emergencies!
 
 ---
 
@@ -335,21 +366,21 @@
 |---------|---------|----------|-----------|
 | Opening | Aayush | 0:30 | 0:30 |
 | Introduction | Aayush | 1:30 | 2:00 |
-| Objectives | Ronak | 1:00 | 3:00 |
-| Technologies | Soumya | 1:00 | 4:00 |
-| Impact | Dushyant | 1:00 | 5:00 |
-| SDGs | Sanskar | 1:00 | 6:00 |
-| Solution & Roadmap | Aayush | 2:00 | 8:00 |
-| Closing | Aayush | 0:30 | 8:30 |
+| Objectives + Role | Ronak | 1:15 | 3:15 |
+| Technologies + Role | Soumya | 1:15 | 4:30 |
+| Impact + Role | Dushyant | 1:15 | 5:45 |
+| SDGs + Role | Sanskar | 1:15 | 7:00 |
+| Solution & Roadmap + Role | Aayush | 2:00 | 9:00 |
+| Closing | Aayush | 0:30 | 9:30 |
 
-**Total Duration:** 8 minutes 30 seconds ✅
+**Total Duration:** 9 minutes 30 seconds ✅
 
 **Work Distribution:**
-- Aayush (Leader): 50% (4 minutes)
-- Ronak: 12.5% (1 minute)
-- Soumya: 12.5% (1 minute)
-- Dushyant: 12.5% (1 minute)
-- Sanskar: 12.5% (1 minute)
+- Aayush (Leader): 47% (4.5 minutes) - Opening, Intro, Architecture, Roadmap, Closing
+- Ronak: 13% (1:15) - Database, Ambulance Service, Routing Service + Objectives
+- Soumya: 13% (1:15) - Auth Service, Hospital Service, Blood Network + Technologies
+- Dushyant: 13% (1:15) - Frontend, Docker Deployment + Impact & Benefits
+- Sanskar: 13% (1:15) - Documentation, ML Service, ML Models + SDGs
 
 ---
 
