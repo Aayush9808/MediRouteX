@@ -39,17 +39,19 @@
 >
 > **[Point to Objectives section]**
 >
-> Now let me explain our five main objectives:
+> Now let me explain our six main objectives:
 >
-> **Objective 1:** Reduce emergency response time by automating ambulance dispatch - selecting available ambulances based on GPS location.
+> **Objective 1:** Reduce emergency response time by automatically dispatching the nearest available ambulance using GPS-based smart routing algorithms.
 >
-> **Objective 2:** Provide real-time hospital resource visibility including ICU, Emergency, and General bed availability.
+> **Objective 2:** Provide real-time hospital resource visibility, including ICU, Emergency, and General ward bed availability.
 >
-> **Objective 3:** Enable rapid blood availability coordination by broadcasting emergency blood needs to nearby hospitals and blood banks.
+> **Objective 3:** Enable rapid blood availability coordination by broadcasting blood emergency alerts to nearby hospitals and blood banks.
 >
-> **Objective 4:** Predict ambulance arrival time using machine learning models based on distance, traffic conditions, and historical data.
+> **Objective 4:** Predict ambulance arrival time (ETA) using machine learning models based on distance, traffic conditions, and historical data.
 >
-> **Objective 5:** Improve coordination between emergency services, hospitals, and trauma centers through our unified digital platform. We also aim to develop a scalable system that can support smart cities and large-scale emergency networks.
+> **Objective 5:** Improve coordination between emergency services, hospitals, and dispatch centers through a unified digital platform.
+>
+> **Objective 6:** Develop a scalable and intelligent healthcare response system that can support smart cities and large-scale emergency networks.
 >
 > Now, Soumya will explain the technologies we used."
 
