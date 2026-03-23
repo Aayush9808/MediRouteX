@@ -7,7 +7,16 @@ import { Request } from 'express';
 
 // ==================== User Types ====================
 
-export type UserRole = 'admin' | 'dispatcher' | 'driver' | 'hospital_staff' | 'hospital_admin' | 'user';
+export type UserRole =
+  | 'admin'
+  | 'dispatcher'
+  | 'driver'
+  | 'hospital_staff'
+  | 'hospital_admin'
+  | 'hospital'
+  | 'patient'
+  | 'blood_bank'
+  | 'user';
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'pending_verification';
 
 export interface User {

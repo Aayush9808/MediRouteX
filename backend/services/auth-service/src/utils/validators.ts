@@ -1,5 +1,17 @@
 import { z } from 'zod';
 
+const userRoleEnum = z.enum([
+  'admin',
+  'dispatcher',
+  'driver',
+  'hospital_staff',
+  'hospital_admin',
+  'hospital',
+  'patient',
+  'blood_bank',
+  'user',
+]);
+
 /**
  * Validation Schemas for Auth Service
  * Using Zod for runtime validation and type inference
@@ -26,7 +38,7 @@ export const registerSchema = z.object({
     .string()
     .regex(/^\+?[\d\s-()]{10,15}$/, 'Invalid phone number format')
     .optional(),
-  role: z.enum(['admin', 'dispatcher', 'driver', 'hospital_staff', 'hospital_admin', 'user']).default('user'),
+  role: userRoleEnum.default('user'),
 });
 
 // ==================== Login Schema ====================
@@ -51,7 +63,7 @@ export const updateUserSchema = z.object({
     .optional(),
   avatar_url: z.string().url('Invalid avatar URL').optional(),
   status: z.enum(['active', 'inactive', 'suspended', 'pending_verification']).optional(),
-  role: z.enum(['admin', 'dispatcher', 'driver', 'hospital_staff', 'hospital_admin', 'user']).optional(),
+  role: userRoleEnum.optional(),
 }).refine(data => Object.keys(data).length > 0, {
   message: 'At least one field must be provided for update',
 });
@@ -100,7 +112,7 @@ export const refreshTokenSchema = z.object({
 // ==================== Query Schemas ====================
 
 export const userListQuerySchema = z.object({
-  role: z.enum(['admin', 'dispatcher', 'driver', 'hospital_staff', 'hospital_admin', 'user']).optional(),
+  role: userRoleEnum.optional(),
   status: z.enum(['active', 'inactive', 'suspended', 'pending_verification']).optional(),
   search: z.string().optional(),
   page: z.preprocess(
