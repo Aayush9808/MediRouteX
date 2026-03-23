@@ -54,29 +54,76 @@ class AuthService {
       // Fallback: Mock authentication when backend is not available
       console.log('Backend not available, using mock authentication');
       
-      // Check demo credentials
-      if (credentials.email === 'demo@mediroutex.com' && credentials.password === 'demo1234') {
-        const mockUser: User = {
+      const toast = (await import('react-hot-toast')).default;
+
+      // Mock user table — add more roles here for demo
+      const mockUsers: Record<string, User> = {
+        'demo@mediroutex.com:demo1234': {
           id: 'demo-user-1',
           email: 'demo@mediroutex.com',
-          name: 'Demo User',
+          name: 'Demo User (Admin)',
           phone: '+91-9999999999',
           role: 'admin',
           status: 'active',
           created_at: new Date().toISOString()
-        };
+        },
+        'patient@mediroutex.com:patient1234': {
+          id: 'patient-user-1',
+          email: 'patient@mediroutex.com',
+          name: 'Rohan Sharma',
+          phone: '+91-9876543210',
+          role: 'patient',
+          status: 'active',
+          created_at: new Date().toISOString()
+        },
+        'driver@mediroutex.com:driver1234': {
+          id: 'driver-user-1',
+          email: 'driver@mediroutex.com',
+          name: 'Rajesh Kumar',
+          phone: '+91-9812345678',
+          role: 'driver',
+          status: 'active',
+          created_at: new Date().toISOString()
+        },
+        'hospital@mediroutex.com:hospital1234': {
+          id: 'hospital-user-1',
+          email: 'hospital@mediroutex.com',
+          name: 'Dr. Priya Mehta',
+          phone: '+91-9900112233',
+          role: 'hospital',
+          status: 'active',
+          created_at: new Date().toISOString()
+        },
+        'user@mediroutex.com:user1234': {
+          id: 'normal-user-1',
+          email: 'user@mediroutex.com',
+          name: 'Aman Verma',
+          phone: '+91-9898989898',
+          role: 'user',
+          status: 'active',
+          created_at: new Date().toISOString()
+        },
+        'bloodbank@mediroutex.com:blood1234': {
+          id: 'blood-bank-1',
+          email: 'bloodbank@mediroutex.com',
+          name: 'Metro Blood Center',
+          phone: '+91-9777700000',
+          role: 'blood_bank',
+          status: 'active',
+          created_at: new Date().toISOString()
+        },
+      };
 
-        // Store mock tokens
+      const key = `${credentials.email}:${credentials.password}`;
+      const mockUser = mockUsers[key];
+
+      if (mockUser) {
         setTokens('mock-access-token', 'mock-refresh-token');
         setCurrentUser(mockUser);
-
-        // Show success toast
-        const toast = (await import('react-hot-toast')).default;
-        toast.success('Login successful! (Mock Mode)');
-
+        toast.success(`Welcome, ${mockUser.name}! (Mock Mode)`);
         return mockUser;
       }
-      
+
       // If wrong credentials, throw error
       throw new Error('Invalid credentials');
     }

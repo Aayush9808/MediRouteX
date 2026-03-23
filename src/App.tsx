@@ -9,14 +9,20 @@ import BloodBankPanel from './components/BloodBankPanel';
 import EmergencyModal from './components/EmergencyModal';
 import MobileNav from './components/MobileNav';
 import LoginPage from './components/LoginPage';
+import PatientDashboard from './components/PatientDashboard';
+import DriverDashboard from './components/DriverDashboard';
+import HospitalDashboard from './components/HospitalDashboard';
+import NormalUserDashboard from './components/NormalUserDashboard';
+import BloodBankDashboard from './components/BloodBankDashboard';
 import { EmergencyProvider } from './context/EmergencyContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { BloodProvider } from './contexts/BloodContext';
 
 function MainApp() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const [isDark, setIsDark] = useState(true);
   const [showEmergencyModal, setShowEmergencyModal] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [showLogin, setShowLogin] = useState(!isAuthenticated);
   const [activePanel, setActivePanel] = useState<'main' | 'blood'>('main');
@@ -55,6 +61,65 @@ function MainApp() {
     return <LoginPage onSuccess={() => setShowLogin(false)} />;
   }
 
+  const role = user?.role ?? 'admin';
+
+  // ── Role-specific portals (wrapped in providers) ──────────────────────
+  if (role === 'patient') {
+    return (
+      <EmergencyProvider>
+        <BloodProvider>
+          <PatientDashboard />
+          <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
+        </BloodProvider>
+      </EmergencyProvider>
+    );
+  }
+
+  if (role === 'driver') {
+    return (
+      <EmergencyProvider>
+        <BloodProvider>
+          <DriverDashboard />
+          <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
+        </BloodProvider>
+      </EmergencyProvider>
+    );
+  }
+
+  if (role === 'hospital') {
+    return (
+      <EmergencyProvider>
+        <BloodProvider>
+          <HospitalDashboard />
+          <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
+        </BloodProvider>
+      </EmergencyProvider>
+    );
+  }
+
+  if (role === 'user') {
+    return (
+      <EmergencyProvider>
+        <BloodProvider>
+          <NormalUserDashboard />
+          <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
+        </BloodProvider>
+      </EmergencyProvider>
+    );
+  }
+
+  if (role === 'blood_bank') {
+    return (
+      <EmergencyProvider>
+        <BloodProvider>
+          <BloodBankDashboard />
+          <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
+        </BloodProvider>
+      </EmergencyProvider>
+    );
+  }
+
+  // ── Admin / default full dashboard ───────────────────────────────────
   return (
     <EmergencyProvider>
       <BloodProvider>
@@ -108,14 +173,14 @@ function MainApp() {
           {isMobile && (
             <div className="flex-1 relative">
               <RealMapView />
-              <MobileNav onEmergency={() => setShowEmergencyModal(true)} />
+              <MobileNav isOpen={showMobileNav} onClose={() => setShowMobileNav(false)} />
             </div>
           )}
         </main>
 
         <AnimatePresence>
           {showEmergencyModal && (
-            <EmergencyModal onClose={() => setShowEmergencyModal(false)} />
+            <EmergencyModal isOpen={showEmergencyModal} onClose={() => setShowEmergencyModal(false)} />
           )}
         </AnimatePresence>
 

@@ -216,9 +216,15 @@ export default function LoginPage({ onSuccess }: { onSuccess: () => void }) {
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
-            Demo credentials: demo@mediroutex.com / demo1234
-          </p>
+          <p className="text-gray-500 dark:text-gray-400 text-xs mb-3 text-left space-y-0.5">
+              <span className="block font-semibold text-gray-600 dark:text-gray-300 mb-1">Demo accounts:</span>
+              <span className="block">👤 Admin: demo@mediroutex.com / demo1234</span>
+              <span className="block">🧑 Normal User: user@mediroutex.com / user1234</span>
+              <span className="block">🚑 Driver: driver@mediroutex.com / driver1234</span>
+              <span className="block">🏥 Hospital: hospital@mediroutex.com / hospital1234</span>
+              <span className="block">🧑 Patient: patient@mediroutex.com / patient1234</span>
+              <span className="block">🩸 Blood Bank: bloodbank@mediroutex.com / blood1234</span>
+            </p>
           <p className="text-gray-600 dark:text-gray-400">
             Don't have an account?{' '}
             <button
