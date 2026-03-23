@@ -8,8 +8,6 @@ import {
   Activity,
   Truck,
   Timer,
-  TrendingUp,
-  TrendingDown,
   History,
   ChevronRight,
   Droplets

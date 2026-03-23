@@ -19,11 +19,9 @@ export default function EmergencyModal({ isOpen, onClose }: EmergencyModalProps)
     location: '',
     phone: ''
   });
-  const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
 
   const getCurrentLocation = () => {
-    setUseCurrentLocation(true);
     if (navigator.geolocation) {
       toast.loading('Getting your location...');
       navigator.geolocation.getCurrentPosition(
@@ -35,7 +33,7 @@ export default function EmergencyModal({ isOpen, onClose }: EmergencyModalProps)
           toast.dismiss();
           toast.success('Location acquired!');
         },
-        (error) => {
+        () => {
           toast.dismiss();
           toast.error('Could not get location. Using default.');
           // Default to Greater Noida area
@@ -87,7 +85,6 @@ export default function EmergencyModal({ isOpen, onClose }: EmergencyModalProps)
       phone: ''
     });
     setCoordinates(null);
-    setUseCurrentLocation(false);
   };
 
   return (

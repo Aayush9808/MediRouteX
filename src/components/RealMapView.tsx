@@ -11,7 +11,7 @@ import {
   Navigation,
   Activity
 } from 'lucide-react';
-import { useEmergency, Hospital as HospitalType, Ambulance as AmbulanceType, Emergency } from '../context/EmergencyContext';
+import { useEmergency } from '../context/EmergencyContext';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -178,10 +178,10 @@ export default function RealMapView() {
                       <span className="text-gray-600">Type:</span>
                       <span className="font-medium">{ambulance.type}</span>
                     </div>
-                    {ambulance.driver && (
+                    {ambulance.driverName && (
                       <div className="flex justify-between">
                         <span className="text-gray-600">Driver:</span>
-                        <span className="font-medium">{ambulance.driver}</span>
+                        <span className="font-medium">{ambulance.driverName}</span>
                       </div>
                     )}
                     {ambulance.currentLocation && (
@@ -229,19 +229,19 @@ export default function RealMapView() {
                         <div>
                           <div className="text-gray-600">ICU</div>
                           <div className="font-bold text-blue-600">
-                            {hospital.available_beds?.icu || 0}/{hospital.total_beds?.icu || 0}
+                            {hospital.icuBeds?.available ?? Math.floor(hospital.available_beds * 0.2)}/{hospital.icuBeds?.total ?? Math.floor(hospital.total_beds * 0.2)}
                           </div>
                         </div>
                         <div>
                           <div className="text-gray-600">Emergency</div>
                           <div className="font-bold text-blue-600">
-                            {hospital.available_beds?.emergency || 0}/{hospital.total_beds?.emergency || 0}
+                            {hospital.emergencyBeds?.available ?? Math.floor(hospital.available_beds * 0.3)}/{hospital.emergencyBeds?.total ?? Math.floor(hospital.total_beds * 0.3)}
                           </div>
                         </div>
                         <div>
                           <div className="text-gray-600">General</div>
                           <div className="font-bold text-blue-600">
-                            {hospital.available_beds?.general || 0}/{hospital.total_beds?.general || 0}
+                            {hospital.generalBeds?.available ?? Math.floor(hospital.available_beds * 0.5)}/{hospital.generalBeds?.total ?? Math.floor(hospital.total_beds * 0.5)}
                           </div>
                         </div>
                       </div>

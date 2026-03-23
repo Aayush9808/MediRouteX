@@ -112,7 +112,8 @@ const createApiClient = (baseURL: string): AxiosInstance => {
       }
 
       // Handle other errors
-      const errorMessage = error.response?.data?.error || error.message || 'An error occurred';
+      const responseData = error.response?.data as { error?: string; message?: string } | undefined;
+      const errorMessage = responseData?.error || responseData?.message || error.message || 'An error occurred';
       
       // Don't show toast for certain routes (like initial data fetching)
       if (!originalRequest.url?.includes('/health')) {

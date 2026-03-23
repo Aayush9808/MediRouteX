@@ -306,7 +306,10 @@ export function hasHigherPrivilege(role1: UserRole, role2: UserRole): boolean {
     hospital_admin: 4,
     dispatcher: 3,
     hospital_staff: 2,
+    hospital: 2,
+    blood_bank: 2,
     driver: 1,
+    patient: 0,
     user: 0,
   };
 

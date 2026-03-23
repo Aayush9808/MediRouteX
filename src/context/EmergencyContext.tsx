@@ -364,7 +364,6 @@ export function EmergencyProvider({ children }: { children: ReactNode }) {
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
 
   const activeEmergencies = emergencies.filter(e => e.status !== 'Completed').length;
   const avgResponseTime = 8.5; // Can be fetched from ML service
@@ -430,7 +429,6 @@ export function EmergencyProvider({ children }: { children: ReactNode }) {
       console.log('Loaded mock data due to backend error');
     } finally {
       setLoading(false);
-      setIsLoading(false);
     }
   };
 

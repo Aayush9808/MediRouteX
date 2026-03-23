@@ -8,7 +8,7 @@ import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
 export default function LoginPage({ onSuccess }: { onSuccess: () => void }) {
-  const { login, isLoading } = useAuth();
+  const { login, register, isLoading } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -48,7 +48,6 @@ export default function LoginPage({ onSuccess }: { onSuccess: () => void }) {
     }
 
     try {
-      const { register } = useAuth();
       await register(registerData);
       toast.success('Registration successful!');
       onSuccess();
