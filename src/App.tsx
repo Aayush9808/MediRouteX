@@ -56,8 +56,8 @@ const preloadRoleDashboard = (role: PortalRole) => {
 
 function AccessDenied({ role, onLogout }: { role: string; onLogout: () => Promise<void> }) {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0A1628] flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white dark:bg-[#0F2137] border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center shadow-xl">
+    <div className="min-h-screen app-bg ambient-grid flex items-center justify-center px-4">
+      <div className="max-w-md w-full glass-panel rounded-2xl p-8 text-center">
         <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
           <ShieldAlert className="w-7 h-7 text-red-600 dark:text-red-400" />
         </div>
@@ -79,8 +79,8 @@ function AccessDenied({ role, onLogout }: { role: string; onLogout: () => Promis
 
 function FullScreenLoader({ label = 'Loading...' }: { label?: string }) {
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0A1628]">
-      <div className="text-center">
+    <div className="h-screen flex items-center justify-center app-bg ambient-grid">
+      <div className="text-center glass-panel px-10 py-8 rounded-2xl">
         <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
         <p className="text-gray-600 dark:text-gray-400">{label}</p>
       </div>
@@ -166,7 +166,7 @@ function MainApp() {
     <EmergencyProvider>
       <BloodProvider>
       <Suspense fallback={<FullScreenLoader label="Loading control center..." />}>
-      <div className="h-screen flex flex-col bg-gray-50 dark:bg-[#0A1628] overflow-hidden">
+      <div className="h-screen flex flex-col app-bg ambient-grid overflow-hidden">
         <Navigation 
           isDark={isDark} 
           onToggleTheme={() => setIsDark(!isDark)}
@@ -184,7 +184,7 @@ function MainApp() {
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: -300, opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="w-1/4 min-w-[320px] max-w-[400px] border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0F2137] overflow-hidden flex flex-col"
+                  className="w-1/4 min-w-[320px] max-w-[400px] m-3 mr-1 rounded-2xl glass-panel overflow-hidden flex flex-col"
                 >
                   <LeftSidebar onRequestEmergency={() => setShowEmergencyModal(true)} />
                 </motion.div>
@@ -204,7 +204,7 @@ function MainApp() {
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: 300, opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="w-1/4 min-w-[320px] max-w-[400px] border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0F2137] overflow-hidden flex flex-col"
+                  className="w-1/4 min-w-[320px] max-w-[400px] m-3 ml-1 rounded-2xl glass-panel overflow-hidden flex flex-col"
                 >
                   {activePanel === 'blood' ? <BloodBankPanel /> : <RightSidebar />}
                 </motion.div>

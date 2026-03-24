@@ -5,15 +5,15 @@ export default function RightSidebar() {
   const { notifications } = useEmergency();
 
   return (
-    <div className="w-80 bg-white dark:bg-[#0F1E35] border-l border-gray-200 dark:border-gray-800 flex flex-col">
+    <div className="w-80 h-full flex flex-col">
       {/* Notifications Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="p-4 border-b border-gray-200/70 dark:border-gray-700/60">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <h2 className="font-semibold text-gray-900 dark:text-white">Notifications</h2>
           </div>
-          <span className="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs px-2 py-1 rounded-full">
+          <span className="bg-red-100/80 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs px-2 py-1 rounded-full font-semibold">
             {notifications.length}
           </span>
         </div>
@@ -24,7 +24,7 @@ export default function RightSidebar() {
         {notifications.map((notification) => (
           <div
             key={notification.id}
-            className="p-4 border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+            className="p-4 border-b border-gray-200/70 dark:border-gray-700/60 hover:bg-white/60 dark:hover:bg-slate-800/30 transition-colors"
           >
             <div className="flex gap-3">
               <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${

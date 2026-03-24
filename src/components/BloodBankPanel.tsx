@@ -279,9 +279,9 @@ export default function BloodBankPanel() {
   const fulfilledToday = alerts.filter(a => a.status === 'Fulfilled').length;
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-[#0F2137]">
+    <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="p-4 border-b border-gray-200/70 dark:border-gray-700/60">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-rose-500 rounded-lg flex items-center justify-center">
@@ -296,7 +296,7 @@ export default function BloodBankPanel() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowNewAlert(true)}
-            className="flex items-center gap-1.5 bg-red-600 hover:bg-red-500 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-lg shadow-red-500/30 transition-colors"
+            className="flex items-center gap-1.5 bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-500 hover:to-rose-400 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-lg shadow-red-500/30 transition-colors"
           >
             <AlertTriangle className="w-4 h-4" />
             BLOOD ALERT
@@ -305,15 +305,15 @@ export default function BloodBankPanel() {
 
         {/* Stats Row */}
         <div className="grid grid-cols-3 gap-2">
-          <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-2 text-center">
+          <div className="glass-soft rounded-lg p-2 text-center">
             <div className="text-lg font-black text-red-600 dark:text-red-400">{activeAlerts.length}</div>
             <div className="text-[10px] text-gray-500">Active Alerts</div>
           </div>
-          <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-2 text-center">
+          <div className="glass-soft rounded-lg p-2 text-center">
             <div className="text-lg font-black text-amber-600 dark:text-amber-400">{shortages.length}</div>
             <div className="text-[10px] text-gray-500">Shortages</div>
           </div>
-          <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-2 text-center">
+          <div className="glass-soft rounded-lg p-2 text-center">
             <div className="text-lg font-black text-green-600 dark:text-green-400">{fulfilledToday}</div>
             <div className="text-[10px] text-gray-500">Fulfilled</div>
           </div>
@@ -321,7 +321,7 @@ export default function BloodBankPanel() {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-200 dark:border-gray-800">
+      <div className="flex border-b border-gray-200/70 dark:border-gray-700/60">
         {[
           { id: 'alerts', label: 'Alerts', count: activeAlerts.length },
           { id: 'inventory', label: 'Inventory', count: hospitals.length },

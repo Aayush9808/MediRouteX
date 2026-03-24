@@ -25,10 +25,10 @@ export default function StatsCard({
   color,
 }: StatsCardProps) {
   const colorClasses = {
-    red: 'text-red-500 bg-red-50 dark:bg-red-900/20',
-    green: 'text-green-500 bg-green-50 dark:bg-green-900/20',
-    blue: 'text-blue-500 bg-blue-50 dark:bg-blue-900/20',
-    amber: 'text-amber-500 bg-amber-50 dark:bg-amber-900/20',
+    red: 'text-red-500 bg-red-100/80 dark:bg-red-900/30',
+    green: 'text-green-500 bg-green-100/80 dark:bg-green-900/30',
+    blue: 'text-blue-500 bg-blue-100/80 dark:bg-blue-900/30',
+    amber: 'text-amber-500 bg-amber-100/80 dark:bg-amber-900/30',
   };
 
   return (
@@ -36,8 +36,9 @@ export default function StatsCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -2 }}
-      className="p-4 bg-white dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow"
+      className="p-4 glass-soft rounded-xl border border-white/60 dark:border-slate-700/60 shadow-sm hover:shadow-lg hover:shadow-blue-500/10 transition-all"
     >
+      <div className="h-1 w-14 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 mb-3 opacity-70" />
       <div className="flex items-start justify-between">
         <div className={`p-2.5 rounded-xl ${colorClasses[color]}`}>
           <Icon className="w-5 h-5" />
@@ -53,9 +54,9 @@ export default function StatsCard({
       </div>
 
       <div className="mt-3">
-        <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
+        <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{title}</p>
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">
+          <span className="text-2xl font-black text-gray-900 dark:text-white">
             {value}
           </span>
           {unit && (

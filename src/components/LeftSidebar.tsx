@@ -49,12 +49,12 @@ export default function LeftSidebar({ onRequestEmergency }: LeftSidebarProps) {
   return (
     <div className="flex flex-col h-full">
       {/* Emergency Request Button */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="p-4 border-b border-gray-200/70 dark:border-gray-700/60">
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={onRequestEmergency}
-          className="w-full py-4 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-lg rounded-xl shadow-lg shadow-red-500/30 flex items-center justify-center gap-3 transition-all"
+          className="w-full py-4 bg-gradient-to-r from-red-600 via-rose-500 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white font-bold text-lg rounded-xl shadow-xl shadow-red-500/40 flex items-center justify-center gap-3 transition-all"
         >
           <Plus className="w-6 h-6" />
           REQUEST AMBULANCE
@@ -62,7 +62,7 @@ export default function LeftSidebar({ onRequestEmergency }: LeftSidebarProps) {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-200 dark:border-gray-800">
+      <div className="flex border-b border-gray-200/70 dark:border-gray-700/60">
         {[
           { id: 'stats', label: 'Stats', icon: Activity },
           { id: 'form', label: 'Request', icon: Plus },
@@ -74,7 +74,7 @@ export default function LeftSidebar({ onRequestEmergency }: LeftSidebarProps) {
             className={`flex-1 py-3 flex items-center justify-center gap-2 text-sm font-medium transition-colors relative ${
               activeTab === tab.id 
                 ? 'text-medical-blue dark:text-white' 
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
             }`}
           >
             <tab.icon className="w-4 h-4" />
@@ -133,21 +133,21 @@ export default function LeftSidebar({ onRequestEmergency }: LeftSidebarProps) {
               color={activeAlerts.length > 0 ? 'red' : 'green'}
             />
 
-            <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+            <div className="p-4 rounded-xl glass-soft border border-white/70 dark:border-slate-700/60">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-xs font-semibold text-gray-700 dark:text-gray-300">API Diagnostics</h3>
                 <span className="text-[10px] text-gray-500 dark:text-gray-400">Live</span>
               </div>
               <div className="grid grid-cols-3 gap-2">
-                <div className="text-center py-2 rounded-lg bg-white dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700">
+                <div className="text-center py-2 rounded-lg bg-white/80 dark:bg-gray-900/40 border border-gray-200/80 dark:border-gray-700">
                   <p className="text-[10px] text-gray-500">Requests</p>
                   <p className="text-sm font-semibold text-gray-900 dark:text-white">{apiMetrics.totalRequests}</p>
                 </div>
-                <div className="text-center py-2 rounded-lg bg-white dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700">
+                <div className="text-center py-2 rounded-lg bg-white/80 dark:bg-gray-900/40 border border-gray-200/80 dark:border-gray-700">
                   <p className="text-[10px] text-gray-500">Success</p>
                   <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{apiMetrics.successRate}%</p>
                 </div>
-                <div className="text-center py-2 rounded-lg bg-white dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700">
+                <div className="text-center py-2 rounded-lg bg-white/80 dark:bg-gray-900/40 border border-gray-200/80 dark:border-gray-700">
                   <p className="text-[10px] text-gray-500">Avg Latency</p>
                   <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">{apiMetrics.avgLatencyMs}ms</p>
                 </div>
@@ -166,7 +166,7 @@ export default function LeftSidebar({ onRequestEmergency }: LeftSidebarProps) {
                     key={emergency.id}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-medical-blue/50 transition-colors cursor-pointer"
+                    className="p-3 glass-soft rounded-xl border border-gray-200/70 dark:border-gray-700/60 hover:border-medical-blue/40 transition-colors cursor-pointer"
                   >
                     <div className="flex items-start justify-between">
                       <div>
@@ -216,7 +216,7 @@ export default function LeftSidebar({ onRequestEmergency }: LeftSidebarProps) {
                 key={emergency.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700"
+                className="p-4 glass-soft rounded-xl border border-gray-200/70 dark:border-gray-700/60"
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-mono text-sm text-medical-blue">{emergency.id}</span>

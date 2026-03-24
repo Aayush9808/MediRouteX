@@ -333,7 +333,7 @@ export default function RealMapView() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/95 backdrop-blur-md border border-gray-200 rounded-xl shadow-lg"
+          className="glass-panel rounded-xl"
         >
           <div className="flex items-center gap-3 px-4 py-3">
             <Search className="w-5 h-5 text-gray-400" />
@@ -353,7 +353,7 @@ export default function RealMapView() {
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-white/95 backdrop-blur-md border border-gray-200 rounded-xl p-4 shadow-lg"
+          className="glass-panel rounded-xl p-4"
         >
           <div className="flex items-center gap-2 mb-3">
             <Layers className="w-4 h-4 text-gray-700" />
@@ -380,7 +380,7 @@ export default function RealMapView() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/95 backdrop-blur-md border border-gray-200 rounded-xl p-4 shadow-lg"
+          className="glass-panel rounded-xl p-4"
         >
           <h4 className="text-sm font-semibold text-gray-700 mb-3">LEGEND</h4>
           <div className="space-y-2 text-xs">
@@ -421,7 +421,7 @@ export default function RealMapView() {
               );
             }
           }}
-          className="p-3 bg-white/95 backdrop-blur-md border border-gray-200 rounded-xl text-blue-600 hover:bg-blue-50 transition-colors shadow-lg"
+          className="p-3 glass-panel rounded-xl text-blue-600 dark:text-blue-300 hover:bg-blue-50/80 dark:hover:bg-blue-900/20 transition-colors"
         >
           <Navigation className="w-5 h-5" />
         </motion.button>

@@ -38,10 +38,10 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
   ]);
 
   return (
-    <nav className="h-16 bg-white dark:bg-[#0F2137] border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 lg:px-6 z-50">
+    <nav className="h-16 mx-3 mt-3 rounded-2xl glass-panel flex items-center justify-between px-4 lg:px-6 z-50">
       {/* Logo */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-gradient-to-br from-medical-blue to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+        <div className="w-10 h-10 bg-gradient-to-br from-blue-600 via-indigo-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
           <Ambulance className="w-6 h-6 text-white" />
         </div>
         <div className="hidden sm:block">
@@ -61,7 +61,7 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
             placeholder="Search location, ambulance, hospital..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-gray-100 dark:bg-gray-800 border-0 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-medical-blue focus:outline-none transition-all"
+            className="w-full pl-10 pr-4 py-2.5 glass-soft rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500/70 focus:outline-none transition-all"
           />
         </div>
       </div>
@@ -73,7 +73,7 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onToggleTheme}
-          className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+          className="p-2.5 rounded-xl glass-soft text-gray-600 dark:text-gray-300 hover:bg-white/80 dark:hover:bg-slate-700/40 transition-colors"
         >
           {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </motion.button>
@@ -86,7 +86,7 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
           className={`p-2.5 rounded-xl relative transition-colors ${
             activePanel === 'blood'
               ? 'bg-red-600 text-white shadow-lg shadow-red-500/30'
-              : 'bg-gray-100 dark:bg-gray-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20'
+                : 'glass-soft text-red-500 hover:bg-red-50/90 dark:hover:bg-red-900/20'
           }`}
           title="Blood Bank & Alerts"
         >
@@ -104,7 +104,7 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowNotifications(!showNotifications)}
-            className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative"
+            className="p-2.5 rounded-xl glass-soft text-gray-600 dark:text-gray-300 hover:bg-white/80 dark:hover:bg-slate-700/40 transition-colors relative"
           >
             <Bell className="w-5 h-5" />
             <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-gray-800 animate-pulse" />
@@ -116,7 +116,7 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
+                className="absolute right-0 top-full mt-2 w-80 glass-panel rounded-xl overflow-hidden z-50"
               >
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                   <h3 className="font-semibold text-gray-900 dark:text-white">Notifications</h3>
@@ -140,7 +140,7 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setShowUserMenu(!showUserMenu)}
-            className="flex items-center gap-3 p-1.5 pr-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="flex items-center gap-3 p-1.5 pr-4 rounded-xl hover:bg-white/70 dark:hover:bg-slate-700/30 transition-colors"
           >
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-white font-semibold text-sm">
               {(user?.name || 'U').slice(0, 2).toUpperCase()}
@@ -158,7 +158,7 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
+                className="absolute right-0 top-full mt-2 w-56 glass-panel rounded-xl overflow-hidden z-50"
               >
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                   <p className="font-medium text-gray-900 dark:text-white">{user?.name || 'User'}</p>
