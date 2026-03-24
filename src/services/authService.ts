@@ -3,7 +3,7 @@
  * Handles login, registration, and user management
  */
 
-import { authApi, apiCall, setTokens, setCurrentUser, clearTokens, getCurrentUser } from './api';
+import { authApi, apiCall, setTokens, setCurrentUser, clearTokens, getCurrentUser, getAccessToken } from './api';
 
 export interface LoginCredentials {
   email: string;
@@ -152,7 +152,10 @@ class AuthService {
    */
   async logout(): Promise<void> {
     try {
-      await authApi.post('/auth/logout');
+      const token = getAccessToken();
+      if (token && !token.startsWith('mock-')) {
+        await authApi.post('/auth/logout');
+      }
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
@@ -164,13 +167,25 @@ class AuthService {
    * Get current user profile
    */
   async getProfile(): Promise<User> {
-    const response = await apiCall<User>(
-      authApi.get('/auth/me'),
-      { silent: true }
-    );
+    const token = getAccessToken();
+    const current = getCurrentUser();
 
-    setCurrentUser(response);
-    return response;
+    if (token?.startsWith('mock-') && current) {
+      return current;
+    }
+
+    try {
+      const response = await apiCall<User>(
+        authApi.get('/auth/me'),
+        { silent: true }
+      );
+
+      setCurrentUser(response);
+      return response;
+    } catch (error) {
+      if (current) return current;
+      throw error;
+    }
   }
 
   /**

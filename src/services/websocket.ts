@@ -7,6 +7,11 @@ import { io, Socket } from 'socket.io-client';
 import { getAccessToken } from './api';
 import toast from 'react-hot-toast';
 
+const WS_CONFIG = {
+  AMBULANCE_WS: import.meta.env.VITE_AMBULANCE_WS_URL || 'http://localhost:5002',
+  EMERGENCY_WS: import.meta.env.VITE_EMERGENCY_WS_URL || 'http://localhost:5001',
+};
+
 type EventCallback = (data: any) => void;
 
 class WebSocketService {
@@ -23,25 +28,29 @@ class WebSocketService {
     }
 
     const token = getAccessToken();
+    // In demo/mock mode we intentionally avoid backend sockets
+    if (!token || token.startsWith('mock-')) {
+      return;
+    }
     const auth = token ? { auth: { token } } : {};
 
     try {
       // Connect to Ambulance Service WebSocket
-      this.ambulanceSocket = io('http://localhost:5002', {
+      this.ambulanceSocket = io(WS_CONFIG.AMBULANCE_WS, {
         ...auth,
         transports: ['websocket'],
         reconnection: true,
-        reconnectionDelay: 1000,
-        reconnectionAttempts: 5,
+        reconnectionDelay: 2000,
+        reconnectionAttempts: 3,
       });
 
       // Connect to Emergency Service WebSocket
-      this.emergencySocket = io('http://localhost:5001', {
+      this.emergencySocket = io(WS_CONFIG.EMERGENCY_WS, {
         ...auth,
         transports: ['websocket'],
         reconnection: true,
-        reconnectionDelay: 1000,
-        reconnectionAttempts: 5,
+        reconnectionDelay: 2000,
+        reconnectionAttempts: 3,
       });
 
       // Setup connection handlers

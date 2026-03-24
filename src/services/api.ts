@@ -6,14 +6,19 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import toast from 'react-hot-toast';
 
+const normalizeServiceUrl = (rawUrl: string, fallback: string) => {
+  const url = (rawUrl || '').trim() || fallback;
+  return /\/api\/v\d+$/i.test(url) ? url : `${url.replace(/\/$/, '')}/api/v1`;
+};
+
 // API Base URLs
 export const API_CONFIG = {
-  EMERGENCY_SERVICE: import.meta.env.VITE_EMERGENCY_SERVICE_URL || 'http://localhost:5001/api/v1',
-  AMBULANCE_SERVICE: import.meta.env.VITE_AMBULANCE_SERVICE_URL || 'http://localhost:5002/api/v1',
-  HOSPITAL_SERVICE: import.meta.env.VITE_HOSPITAL_SERVICE_URL || 'http://localhost:5003/api/v1',
-  AUTH_SERVICE: import.meta.env.VITE_AUTH_SERVICE_URL || 'http://localhost:5004/api/v1',
-  ROUTING_SERVICE: import.meta.env.VITE_ROUTING_SERVICE_URL || 'http://localhost:5005/api/v1',
-  ML_SERVICE: import.meta.env.VITE_ML_SERVICE_URL || 'http://localhost:5006/api/v1',
+  EMERGENCY_SERVICE: normalizeServiceUrl(import.meta.env.VITE_EMERGENCY_SERVICE_URL, 'http://localhost:5001/api/v1'),
+  AMBULANCE_SERVICE: normalizeServiceUrl(import.meta.env.VITE_AMBULANCE_SERVICE_URL, 'http://localhost:5002/api/v1'),
+  HOSPITAL_SERVICE: normalizeServiceUrl(import.meta.env.VITE_HOSPITAL_SERVICE_URL, 'http://localhost:5003/api/v1'),
+  AUTH_SERVICE: normalizeServiceUrl(import.meta.env.VITE_AUTH_SERVICE_URL, 'http://localhost:5004/api/v1'),
+  ROUTING_SERVICE: normalizeServiceUrl(import.meta.env.VITE_ROUTING_SERVICE_URL, 'http://localhost:5005/api/v1'),
+  ML_SERVICE: normalizeServiceUrl(import.meta.env.VITE_ML_SERVICE_URL, 'http://localhost:5006/api/v1'),
 };
 
 // Token management
@@ -120,6 +125,9 @@ const createApiClient = (baseURL: string): AxiosInstance => {
       const shouldSilence =
         isNetworkIssue ||
         originalRequest.url?.includes('/auth/login') ||
+        originalRequest.url?.includes('/auth/me') ||
+        originalRequest.url?.includes('/auth/refresh') ||
+        originalRequest.url?.includes('/auth/logout') ||
         originalRequest.url?.includes('/health') ||
         originalRequest.url?.includes('/active') ||
         originalRequest.url?.includes('/ambulance') ||
