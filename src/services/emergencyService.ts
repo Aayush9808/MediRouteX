@@ -3,7 +3,7 @@
  * Handles emergency operations
  */
 
-import { emergencyApi, apiCall } from './api';
+import { emergencyApi, apiCall, apiCallWithRetry } from './api';
 
 export interface Emergency {
   id: string;
@@ -47,9 +47,12 @@ class EmergencyService {
   /**
    * Get all emergencies
    */
-  async getAll(params?: { status?: string; severity?: string; page?: number; limit?: number }): Promise<{ emergencies: Emergency[]; total: number }> {
-    return apiCall(
-      emergencyApi.get('/emergencies', { params }),
+  async getAll(
+    params?: { status?: string; severity?: string; page?: number; limit?: number },
+    signal?: AbortSignal
+  ): Promise<{ emergencies: Emergency[]; total: number }> {
+    return apiCallWithRetry(
+      () => emergencyApi.get('/emergencies', { params, signal }),
       { silent: true }
     );
   }
@@ -57,9 +60,9 @@ class EmergencyService {
   /**
    * Get active emergencies
    */
-  async getActive(): Promise<Emergency[]> {
-    const response = await apiCall<{ emergencies: Emergency[] }>(
-      emergencyApi.get('/emergencies/active'),
+  async getActive(signal?: AbortSignal): Promise<Emergency[]> {
+    const response = await apiCallWithRetry<{ emergencies: Emergency[] }>(
+      () => emergencyApi.get('/emergencies/active', { signal }),
       { silent: true }
     );
     return response.emergencies;
@@ -68,9 +71,9 @@ class EmergencyService {
   /**
    * Get emergency by ID
    */
-  async getById(id: string): Promise<Emergency> {
-    return apiCall<Emergency>(
-      emergencyApi.get(`/emergencies/${id}`),
+  async getById(id: string, signal?: AbortSignal): Promise<Emergency> {
+    return apiCallWithRetry<Emergency>(
+      () => emergencyApi.get(`/emergencies/${id}`, { signal }),
       { silent: true }
     );
   }
@@ -118,9 +121,9 @@ class EmergencyService {
   /**
    * Get emergency statistics
    */
-  async getStats(): Promise<any> {
-    return apiCall(
-      emergencyApi.get('/emergencies/stats'),
+  async getStats(signal?: AbortSignal): Promise<any> {
+    return apiCallWithRetry(
+      () => emergencyApi.get('/emergencies/stats', { signal }),
       { silent: true }
     );
   }

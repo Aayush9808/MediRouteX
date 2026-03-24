@@ -1,9 +1,10 @@
-import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, useCallback, ReactNode, useEffect, useRef } from 'react';
 import { 
   emergencyService, 
   ambulanceService, 
   hospitalService,
   websocketService,
+  isRequestCanceled,
   Emergency as APIEmergency,
   Ambulance as APIAmbulance,
   Hospital as APIHospital
@@ -364,6 +365,8 @@ export function EmergencyProvider({ children }: { children: ReactNode }) {
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
+  const loadAbortControllerRef = useRef<AbortController | null>(null);
+  const hasShownDemoModeToastRef = useRef(false);
 
   const activeEmergencies = emergencies.filter(e => e.status !== 'Completed').length;
   const avgResponseTime = 8.5; // Can be fetched from ML service
@@ -389,23 +392,28 @@ export function EmergencyProvider({ children }: { children: ReactNode }) {
 
   // Load initial data
   useEffect(() => {
-    loadInitialData();
+    const controller = new AbortController();
+    loadAbortControllerRef.current = controller;
+    loadInitialData(controller.signal);
     setupWebSocketListeners();
 
     return () => {
+      loadAbortControllerRef.current?.abort();
       websocketService.removeAllListeners();
     };
   }, []);
 
-  const loadInitialData = async () => {
+  const loadInitialData = async (signal?: AbortSignal) => {
     setLoading(true);
     try {
       // Try to load from backend
       const [emergenciesData, ambulancesData, hospitalsData] = await Promise.all([
-        emergencyService.getActive().catch(() => []),
-        ambulanceService.getAll().catch(() => []),
-        hospitalService.getAll().catch(() => []),
+        emergencyService.getActive(signal).catch(() => []),
+        ambulanceService.getAll(undefined, signal).catch(() => []),
+        hospitalService.getAll(undefined, signal).catch(() => []),
       ]);
+
+      if (signal?.aborted) return;
 
       // If backend returned data, use it
       if (emergenciesData.length > 0 || ambulancesData.length > 0 || hospitalsData.length > 0) {
@@ -418,9 +426,16 @@ export function EmergencyProvider({ children }: { children: ReactNode }) {
         setEmergencies(getMockEmergencies());
         setAmbulances(getMockAmbulances());
         setHospitals(getMockHospitals());
-        toast.success('Running in demo mode with mock data');
+        if (!hasShownDemoModeToastRef.current) {
+          toast.success('Running in demo mode with mock data');
+          hasShownDemoModeToastRef.current = true;
+        }
       }
     } catch (error) {
+      if (isRequestCanceled(error)) {
+        return;
+      }
+
       console.error('Error loading initial data:', error);
       // Load mock data on error
       setEmergencies(getMockEmergencies());
@@ -428,7 +443,9 @@ export function EmergencyProvider({ children }: { children: ReactNode }) {
       setHospitals(getMockHospitals());
       console.log('Loaded mock data due to backend error');
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) {
+        setLoading(false);
+      }
     }
   };
 
@@ -481,7 +498,10 @@ export function EmergencyProvider({ children }: { children: ReactNode }) {
   };
 
   const refreshData = async () => {
-    await loadInitialData();
+    loadAbortControllerRef.current?.abort();
+    const controller = new AbortController();
+    loadAbortControllerRef.current = controller;
+    await loadInitialData(controller.signal);
   };
 
   const addEmergency = useCallback(async (emergency: Omit<Emergency, 'id' | 'status' | 'timestamp'>) => {

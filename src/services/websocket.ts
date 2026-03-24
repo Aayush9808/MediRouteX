@@ -6,6 +6,7 @@
 import { io, Socket } from 'socket.io-client';
 import { getAccessToken } from './api';
 import toast from 'react-hot-toast';
+import { normalizeRole } from '../utils/roles';
 
 const WS_CONFIG = {
   AMBULANCE_WS: import.meta.env.VITE_AMBULANCE_WS_URL || 'http://localhost:5002',
@@ -18,13 +19,33 @@ class WebSocketService {
   private ambulanceSocket: Socket | null = null;
   private emergencySocket: Socket | null = null;
   private isConnected = false;
+  private connectedRole: string | null = null;
+
+  private readonly supportedRoles = new Set([
+    'admin',
+    'patient',
+    'driver',
+    'hospital',
+    'user',
+    'blood_bank',
+  ]);
 
   /**
    * Connect to WebSocket services
    */
-  connect() {
-    if (this.isConnected) {
+  connect(role?: string) {
+    const normalizedRole = normalizeRole(role);
+
+    if (role && !this.supportedRoles.has(normalizedRole)) {
       return;
+    }
+
+    if (this.isConnected && this.connectedRole === normalizedRole) {
+      return;
+    }
+
+    if (this.isConnected && this.connectedRole !== normalizedRole) {
+      this.disconnect();
     }
 
     const token = getAccessToken();
@@ -41,7 +62,9 @@ class WebSocketService {
         transports: ['websocket'],
         reconnection: true,
         reconnectionDelay: 2000,
-        reconnectionAttempts: 3,
+        reconnectionDelayMax: 10000,
+        randomizationFactor: 0.5,
+        reconnectionAttempts: 5,
       });
 
       // Connect to Emergency Service WebSocket
@@ -50,12 +73,15 @@ class WebSocketService {
         transports: ['websocket'],
         reconnection: true,
         reconnectionDelay: 2000,
-        reconnectionAttempts: 3,
+        reconnectionDelayMax: 10000,
+        randomizationFactor: 0.5,
+        reconnectionAttempts: 5,
       });
 
       // Setup connection handlers
       this.setupConnectionHandlers();
       this.isConnected = true;
+      this.connectedRole = normalizedRole;
     } catch (error) {
       console.error('WebSocket connection error:', error);
     }
@@ -194,6 +220,7 @@ class WebSocketService {
     }
 
     this.isConnected = false;
+    this.connectedRole = null;
   }
 
   /**

@@ -1,35 +1,108 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode, ComponentType, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
-import Navigation from './components/Navigation';
-import LeftSidebar from './components/LeftSidebar';
-import RealMapView from './components/RealMapView';
-import RightSidebar from './components/RightSidebar';
-import BloodBankPanel from './components/BloodBankPanel';
-import EmergencyModal from './components/EmergencyModal';
-import MobileNav from './components/MobileNav';
+import { ShieldAlert } from 'lucide-react';
 import LoginPage from './components/LoginPage';
-import PatientDashboard from './components/PatientDashboard';
-import DriverDashboard from './components/DriverDashboard';
-import HospitalDashboard from './components/HospitalDashboard';
-import NormalUserDashboard from './components/NormalUserDashboard';
-import BloodBankDashboard from './components/BloodBankDashboard';
+import AppErrorBoundary from './components/AppErrorBoundary';
 import { EmergencyProvider } from './context/EmergencyContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { BloodProvider } from './contexts/BloodContext';
+import { AppRole, PortalRole, normalizeRole, isPortalRole, getRoleLabel } from './utils/roles';
+const THEME_STORAGE_KEY = 'mediroutex_theme';
+
+const Navigation = lazy(() => import('./components/Navigation'));
+const LeftSidebar = lazy(() => import('./components/LeftSidebar'));
+const RealMapView = lazy(() => import('./components/RealMapView'));
+const RightSidebar = lazy(() => import('./components/RightSidebar'));
+const BloodBankPanel = lazy(() => import('./components/BloodBankPanel'));
+const EmergencyModal = lazy(() => import('./components/EmergencyModal'));
+const MobileNav = lazy(() => import('./components/MobileNav'));
+
+const PatientDashboard = lazy(() => import('./components/PatientDashboard'));
+const DriverDashboard = lazy(() => import('./components/DriverDashboard'));
+const HospitalDashboard = lazy(() => import('./components/HospitalDashboard'));
+const NormalUserDashboard = lazy(() => import('./components/NormalUserDashboard'));
+const BloodBankDashboard = lazy(() => import('./components/BloodBankDashboard'));
+
+const ROLE_DASHBOARD_MAP: Record<PortalRole, ComponentType> = {
+  patient: PatientDashboard,
+  driver: DriverDashboard,
+  hospital: HospitalDashboard,
+  user: NormalUserDashboard,
+  blood_bank: BloodBankDashboard,
+};
+
+const preloadRoleDashboard = (role: PortalRole) => {
+  switch (role) {
+    case 'patient':
+      import('./components/PatientDashboard');
+      break;
+    case 'driver':
+      import('./components/DriverDashboard');
+      break;
+    case 'hospital':
+      import('./components/HospitalDashboard');
+      break;
+    case 'user':
+      import('./components/NormalUserDashboard');
+      break;
+    case 'blood_bank':
+      import('./components/BloodBankDashboard');
+      break;
+    default:
+      break;
+  }
+};
+
+function AccessDenied({ role, onLogout }: { role: string; onLogout: () => Promise<void> }) {
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0A1628] flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white dark:bg-[#0F2137] border border-gray-200 dark:border-gray-800 rounded-2xl p-8 text-center shadow-xl">
+        <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+          <ShieldAlert className="w-7 h-7 text-red-600 dark:text-red-400" />
+        </div>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Access Denied</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
+          The role <span className="font-semibold">{getRoleLabel(role)}</span> is not configured for this portal.
+        </p>
+        <button
+          onClick={onLogout}
+          className="w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium transition-colors"
+        >
+          Sign Out
+        </button>
+      </div>
+      <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
+    </div>
+  );
+}
+
+function FullScreenLoader({ label = 'Loading...' }: { label?: string }) {
+  return (
+    <div className="h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0A1628]">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600 dark:text-gray-400">{label}</p>
+      </div>
+    </div>
+  );
+}
 
 function MainApp() {
-  const { isAuthenticated, isLoading, user } = useAuth();
-  const [isDark, setIsDark] = useState(true);
+  const { isAuthenticated, isLoading, user, logout } = useAuth();
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === 'undefined') return true;
+
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    if (stored === 'dark') return true;
+    if (stored === 'light') return false;
+
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? true;
+  });
   const [showEmergencyModal, setShowEmergencyModal] = useState(false);
   const [showMobileNav, setShowMobileNav] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [showLogin, setShowLogin] = useState(!isAuthenticated);
   const [activePanel, setActivePanel] = useState<'main' | 'blood'>('main');
-
-  useEffect(() => {
-    setShowLogin(!isAuthenticated);
-  }, [isAuthenticated]);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -41,88 +114,58 @@ function MainApp() {
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
+      localStorage.setItem(THEME_STORAGE_KEY, 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      localStorage.setItem(THEME_STORAGE_KEY, 'light');
     }
   }, [isDark]);
 
+  const role = normalizeRole(user?.role) as AppRole | string;
+
+  useEffect(() => {
+    if (isPortalRole(role)) {
+      preloadRoleDashboard(role);
+    }
+  }, [role]);
+
   if (isLoading) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0A1628]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
-        </div>
-      </div>
-    );
+    return <FullScreenLoader />;
   }
 
-  if (showLogin) {
-    return <LoginPage onSuccess={() => setShowLogin(false)} />;
+  if (!isAuthenticated) {
+    return <LoginPage onSuccess={() => undefined} />;
   }
 
-  const role = user?.role ?? 'admin';
+  const withRoleProviders = (component: ReactNode) => (
+    <EmergencyProvider>
+      <BloodProvider>
+        {component}
+        <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
+      </BloodProvider>
+    </EmergencyProvider>
+  );
 
   // ── Role-specific portals (wrapped in providers) ──────────────────────
-  if (role === 'patient') {
-    return (
-      <EmergencyProvider>
-        <BloodProvider>
-          <PatientDashboard />
-          <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
-        </BloodProvider>
-      </EmergencyProvider>
+  if (isPortalRole(role)) {
+    const RoleDashboard = ROLE_DASHBOARD_MAP[role];
+
+    return withRoleProviders(
+      <Suspense fallback={<FullScreenLoader label="Loading dashboard..." />}>
+        <RoleDashboard />
+      </Suspense>
     );
   }
 
-  if (role === 'driver') {
-    return (
-      <EmergencyProvider>
-        <BloodProvider>
-          <DriverDashboard />
-          <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
-        </BloodProvider>
-      </EmergencyProvider>
-    );
-  }
-
-  if (role === 'hospital') {
-    return (
-      <EmergencyProvider>
-        <BloodProvider>
-          <HospitalDashboard />
-          <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
-        </BloodProvider>
-      </EmergencyProvider>
-    );
-  }
-
-  if (role === 'user') {
-    return (
-      <EmergencyProvider>
-        <BloodProvider>
-          <NormalUserDashboard />
-          <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
-        </BloodProvider>
-      </EmergencyProvider>
-    );
-  }
-
-  if (role === 'blood_bank') {
-    return (
-      <EmergencyProvider>
-        <BloodProvider>
-          <BloodBankDashboard />
-          <Toaster position="top-right" toastOptions={{ className: 'dark:bg-gray-800 dark:text-white', duration: 4000 }} />
-        </BloodProvider>
-      </EmergencyProvider>
-    );
+  if (role !== 'admin') {
+    return <AccessDenied role={role} onLogout={logout} />;
   }
 
   // ── Admin / default full dashboard ───────────────────────────────────
   return (
     <EmergencyProvider>
       <BloodProvider>
+      <Suspense fallback={<FullScreenLoader label="Loading control center..." />}>
       <div className="h-screen flex flex-col bg-gray-50 dark:bg-[#0A1628] overflow-hidden">
         <Navigation 
           isDark={isDark} 
@@ -192,6 +235,7 @@ function MainApp() {
           }}
         />
       </div>
+      </Suspense>
       </BloodProvider>
     </EmergencyProvider>
   );
@@ -200,7 +244,12 @@ function MainApp() {
 export default function App() {
   return (
     <AuthProvider>
-      <MainApp />
+      <AppErrorBoundary
+        title="Unable to load dashboard"
+        message="An unexpected UI error occurred. Please reload the app."
+      >
+        <MainApp />
+      </AppErrorBoundary>
     </AuthProvider>
   );
 }

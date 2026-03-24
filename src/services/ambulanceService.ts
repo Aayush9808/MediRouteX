@@ -3,7 +3,7 @@
  * Handles ambulance operations and tracking
  */
 
-import { ambulanceApi, apiCall } from './api';
+import { ambulanceApi, apiCall, apiCallWithRetry } from './api';
 
 export interface Ambulance {
   id: string;
@@ -23,9 +23,9 @@ class AmbulanceService {
   /**
    * Get all ambulances
    */
-  async getAll(params?: { status?: string; type?: string }): Promise<Ambulance[]> {
-    const response = await apiCall<{ ambulances: Ambulance[] }>(
-      ambulanceApi.get('/ambulances', { params }),
+  async getAll(params?: { status?: string; type?: string }, signal?: AbortSignal): Promise<Ambulance[]> {
+    const response = await apiCallWithRetry<{ ambulances: Ambulance[] }>(
+      () => ambulanceApi.get('/ambulances', { params, signal }),
       { silent: true }
     );
     return response.ambulances;
@@ -34,9 +34,9 @@ class AmbulanceService {
   /**
    * Get available ambulances
    */
-  async getAvailable(): Promise<Ambulance[]> {
-    const response = await apiCall<{ ambulances: Ambulance[] }>(
-      ambulanceApi.get('/ambulances/available'),
+  async getAvailable(signal?: AbortSignal): Promise<Ambulance[]> {
+    const response = await apiCallWithRetry<{ ambulances: Ambulance[] }>(
+      () => ambulanceApi.get('/ambulances/available', { signal }),
       { silent: true }
     );
     return response.ambulances;
@@ -45,10 +45,11 @@ class AmbulanceService {
   /**
    * Get nearby ambulances (public endpoint)
    */
-  async getNearby(latitude: number, longitude: number, radius: number = 20): Promise<Ambulance[]> {
-    const response = await apiCall<{ ambulances: Ambulance[] }>(
-      ambulanceApi.get('/ambulances/nearby', {
-        params: { latitude, longitude, radius_km: radius }
+  async getNearby(latitude: number, longitude: number, radius: number = 20, signal?: AbortSignal): Promise<Ambulance[]> {
+    const response = await apiCallWithRetry<{ ambulances: Ambulance[] }>(
+      () => ambulanceApi.get('/ambulances/nearby', {
+        params: { latitude, longitude, radius_km: radius },
+        signal,
       }),
       { silent: true }
     );
@@ -58,9 +59,9 @@ class AmbulanceService {
   /**
    * Get ambulance by ID
    */
-  async getById(id: string): Promise<Ambulance> {
-    return apiCall<Ambulance>(
-      ambulanceApi.get(`/ambulances/${id}`),
+  async getById(id: string, signal?: AbortSignal): Promise<Ambulance> {
+    return apiCallWithRetry<Ambulance>(
+      () => ambulanceApi.get(`/ambulances/${id}`, { signal }),
       { silent: true }
     );
   }
@@ -91,9 +92,9 @@ class AmbulanceService {
   /**
    * Get ambulance statistics
    */
-  async getStats(): Promise<any> {
-    return apiCall(
-      ambulanceApi.get('/ambulances/stats'),
+  async getStats(signal?: AbortSignal): Promise<any> {
+    return apiCallWithRetry(
+      () => ambulanceApi.get('/ambulances/stats', { signal }),
       { silent: true }
     );
   }

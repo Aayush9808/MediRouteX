@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Plus, 
@@ -15,6 +15,7 @@ import {
 import { useEmergency } from '../context/EmergencyContext';
 import { useBlood } from '../contexts/BloodContext';
 import StatsCard from './StatsCard';
+import { getApiMetrics, ApiMetricsSnapshot } from '../services';
 
 interface LeftSidebarProps {
   onRequestEmergency: () => void;
@@ -24,6 +25,15 @@ export default function LeftSidebar({ onRequestEmergency }: LeftSidebarProps) {
   const { emergencies, ambulances, avgResponseTime, hospitals } = useEmergency();
   const { activeAlerts, getCriticalShortages } = useBlood();
   const [activeTab, setActiveTab] = useState<'form' | 'stats' | 'history'>('stats');
+  const [apiMetrics, setApiMetrics] = useState<ApiMetricsSnapshot>(getApiMetrics());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setApiMetrics(getApiMetrics());
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const availableAmbulances = ambulances.filter(a => a.status === 'Available').length;
   const totalAmbulances = ambulances.length;
@@ -122,6 +132,27 @@ export default function LeftSidebar({ onRequestEmergency }: LeftSidebarProps) {
               icon={Droplets}
               color={activeAlerts.length > 0 ? 'red' : 'green'}
             />
+
+            <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-xs font-semibold text-gray-700 dark:text-gray-300">API Diagnostics</h3>
+                <span className="text-[10px] text-gray-500 dark:text-gray-400">Live</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <div className="text-center py-2 rounded-lg bg-white dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700">
+                  <p className="text-[10px] text-gray-500">Requests</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{apiMetrics.totalRequests}</p>
+                </div>
+                <div className="text-center py-2 rounded-lg bg-white dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700">
+                  <p className="text-[10px] text-gray-500">Success</p>
+                  <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{apiMetrics.successRate}%</p>
+                </div>
+                <div className="text-center py-2 rounded-lg bg-white dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700">
+                  <p className="text-[10px] text-gray-500">Avg Latency</p>
+                  <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">{apiMetrics.avgLatencyMs}ms</p>
+                </div>
+              </div>
+            </div>
 
             {/* Recent History */}
             <div className="mt-6">

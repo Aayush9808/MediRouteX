@@ -3,9 +3,10 @@
  * Manages user authentication state and operations
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { authService, User, LoginCredentials, RegisterData, websocketService } from '../services';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
+import { authService, User, LoginCredentials, RegisterData, websocketService, isRequestCanceled } from '../services';
 import toast from 'react-hot-toast';
+import { normalizeRole } from '../utils/roles';
 
 interface AuthContextType {
   user: User | null;
@@ -35,71 +36,104 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isMountedRef = useRef(true);
+  const initAbortRef = useRef<AbortController | null>(null);
+
+  const safeSetUser = (value: User | null) => {
+    if (isMountedRef.current) {
+      setUser(value);
+    }
+  };
+
+  const safeSetIsLoading = (value: boolean) => {
+    if (isMountedRef.current) {
+      setIsLoading(value);
+    }
+  };
 
   // Initialize - Check if user is already logged in
   useEffect(() => {
+    isMountedRef.current = true;
+    initAbortRef.current?.abort();
+    const controller = new AbortController();
+    initAbortRef.current = controller;
+
     const initializeAuth = async () => {
       try {
         const currentUser = authService.getCurrentUser();
         
         if (currentUser) {
           // Verify token is still valid by fetching profile
-          const profile = await authService.getProfile();
-          setUser(profile);
+          const profile = await authService.getProfile(controller.signal);
+          if (controller.signal.aborted) return;
+
+          safeSetUser(profile);
           
           // Connect WebSocket
-          websocketService.connect();
+          websocketService.connect(normalizeRole(profile.role));
         }
       } catch (error) {
+        if (isRequestCanceled(error)) {
+          return;
+        }
+
         console.error('Auth initialization error:', error);
         // Token expired or invalid - clear storage
         authService.logout();
-        setUser(null);
+        safeSetUser(null);
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) {
+          safeSetIsLoading(false);
+        }
       }
     };
 
     initializeAuth();
+
+    return () => {
+      isMountedRef.current = false;
+      controller.abort();
+      websocketService.disconnect();
+    };
   }, []);
 
   const login = async (credentials: LoginCredentials) => {
-    setIsLoading(true);
+    safeSetIsLoading(true);
     try {
       const loggedInUser = await authService.login(credentials);
-      setUser(loggedInUser);
+      safeSetUser(loggedInUser);
       
       // Connect WebSocket after login
-      websocketService.connect();
+      websocketService.connect(normalizeRole(loggedInUser.role));
     } catch (error) {
       console.error('Login error:', error);
       throw error;
     } finally {
-      setIsLoading(false);
+      safeSetIsLoading(false);
     }
   };
 
   const register = async (data: RegisterData) => {
-    setIsLoading(true);
+    safeSetIsLoading(true);
     try {
       const newUser = await authService.register(data);
-      setUser(newUser);
+      safeSetUser(newUser);
       
       // Connect WebSocket after registration
-      websocketService.connect();
+      websocketService.connect(normalizeRole(newUser.role));
     } catch (error) {
       console.error('Registration error:', error);
       throw error;
     } finally {
-      setIsLoading(false);
+      safeSetIsLoading(false);
     }
   };
 
   const logout = async () => {
-    setIsLoading(true);
+    safeSetIsLoading(true);
     try {
       await authService.logout();
-      setUser(null);
+      safeSetUser(null);
       
       // Disconnect WebSocket
       websocketService.disconnect();
@@ -108,14 +142,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      setIsLoading(false);
+      safeSetIsLoading(false);
     }
   };
 
   const updateProfile = async (data: Partial<User>) => {
     try {
       const updatedUser = await authService.updateProfile(data);
-      setUser(updatedUser);
+      safeSetUser(updatedUser);
     } catch (error) {
       console.error('Update profile error:', error);
       throw error;
@@ -125,7 +159,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const refreshProfile = async () => {
     try {
       const profile = await authService.getProfile();
-      setUser(profile);
+      safeSetUser(profile);
     } catch (error) {
       console.error('Refresh profile error:', error);
     }

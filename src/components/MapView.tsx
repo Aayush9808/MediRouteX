@@ -1,14 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   ZoomIn,
   ZoomOut,
   Crosshair,
   Layers,
-  Maximize2,
   Search,
   Navigation,
-  MapPin,
   Hospital,
   Truck,
   AlertCircle
@@ -25,23 +23,12 @@ export default function MapView() {
     traffic: false,
   });
   const [selectedItem, setSelectedItem] = useState<HospitalType | AmbulanceType | null>(null);
-  const [mapCenter] = useState({ x: 50, y: 50 });
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Available': return '#22C55E';
       case 'Busy': return '#EF4444';
       case 'Offline': return '#6B7280';
-      default: return '#6B7280';
-    }
-  };
-
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'Critical': return '#DC2626';
-      case 'High': return '#F59E0B';
-      case 'Medium': return '#EAB308';
-      case 'Low': return '#22C55E';
       default: return '#6B7280';
     }
   };
@@ -211,7 +198,7 @@ export default function MapView() {
             </div>
             <div className="absolute -top-1 -right-1 w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm">
               <span className="text-[8px] font-bold text-gray-900">
-                {hospital.icuBeds.available + hospital.emergencyBeds.available}
+                {(hospital.icuBeds?.available ?? 0) + (hospital.emergencyBeds?.available ?? 0)}
               </span>
             </div>
           </div>
@@ -272,19 +259,19 @@ export default function MapView() {
                   <div className="text-center p-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                     <p className="text-xs text-gray-500">ICU</p>
                     <p className="font-semibold text-gray-900 dark:text-white">
-                      {selectedItem.icuBeds.available}/{selectedItem.icuBeds.total}
+                      {selectedItem.icuBeds?.available ?? 0}/{selectedItem.icuBeds?.total ?? 0}
                     </p>
                   </div>
                   <div className="text-center p-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                     <p className="text-xs text-gray-500">Emergency</p>
                     <p className="font-semibold text-gray-900 dark:text-white">
-                      {selectedItem.emergencyBeds.available}/{selectedItem.emergencyBeds.total}
+                      {selectedItem.emergencyBeds?.available ?? 0}/{selectedItem.emergencyBeds?.total ?? 0}
                     </p>
                   </div>
                   <div className="text-center p-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                     <p className="text-xs text-gray-500">General</p>
                     <p className="font-semibold text-gray-900 dark:text-white">
-                      {selectedItem.generalBeds.available}/{selectedItem.generalBeds.total}
+                      {selectedItem.generalBeds?.available ?? 0}/{selectedItem.generalBeds?.total ?? 0}
                     </p>
                   </div>
                 </div>

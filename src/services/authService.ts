@@ -3,7 +3,8 @@
  * Handles login, registration, and user management
  */
 
-import { authApi, apiCall, setTokens, setCurrentUser, clearTokens, getCurrentUser, getAccessToken } from './api';
+import { authApi, apiCall, apiCallWithRetry, setTokens, setCurrentUser, clearTokens, getCurrentUser, getAccessToken } from './api';
+import toast from 'react-hot-toast';
 
 export interface LoginCredentials {
   email: string;
@@ -48,7 +49,6 @@ class AuthService {
 
       setTokens(response.access_token, response.refresh_token);
       setCurrentUser(response.user);
-      const toast = (await import('react-hot-toast')).default;
       toast.success('Login successful!');
 
       return response.user;
@@ -56,8 +56,6 @@ class AuthService {
       // Fallback: Mock authentication when backend is not available
       console.log('Backend not available, using mock authentication');
       
-      const toast = (await import('react-hot-toast')).default;
-
       // Mock user table — add more roles here for demo
       const mockUsers: Record<string, User> = {
         'demo@mediroutex.com:demo1234': {
@@ -166,7 +164,7 @@ class AuthService {
   /**
    * Get current user profile
    */
-  async getProfile(): Promise<User> {
+  async getProfile(signal?: AbortSignal): Promise<User> {
     const token = getAccessToken();
     const current = getCurrentUser();
 
@@ -175,8 +173,8 @@ class AuthService {
     }
 
     try {
-      const response = await apiCall<User>(
-        authApi.get('/auth/me'),
+      const response = await apiCallWithRetry<User>(
+        () => authApi.get('/auth/me', { signal }),
         { silent: true }
       );
 

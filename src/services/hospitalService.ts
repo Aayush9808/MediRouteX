@@ -3,7 +3,7 @@
  * Handles hospital and bed capacity operations
  */
 
-import { hospitalApi, apiCall } from './api';
+import { hospitalApi, apiCall, apiCallWithRetry } from './api';
 
 export interface Hospital {
   id: string;
@@ -37,9 +37,9 @@ class HospitalService {
   /**
    * Get all hospitals
    */
-  async getAll(params?: { type?: string; status?: string }): Promise<Hospital[]> {
-    const response = await apiCall<{ hospitals: Hospital[] }>(
-      hospitalApi.get('/hospitals', { params }),
+  async getAll(params?: { type?: string; status?: string }, signal?: AbortSignal): Promise<Hospital[]> {
+    const response = await apiCallWithRetry<{ hospitals: Hospital[] }>(
+      () => hospitalApi.get('/hospitals', { params, signal }),
       { silent: true }
     );
     return response.hospitals;
@@ -52,11 +52,13 @@ class HospitalService {
     latitude: number,
     longitude: number,
     radius: number = 20,
-    bedType?: string
+    bedType?: string,
+    signal?: AbortSignal
   ): Promise<Hospital[]> {
-    const response = await apiCall<{ hospitals: Hospital[] }>(
-      hospitalApi.get('/hospitals/nearby', {
-        params: { latitude, longitude, radius_km: radius, bed_type: bedType }
+    const response = await apiCallWithRetry<{ hospitals: Hospital[] }>(
+      () => hospitalApi.get('/hospitals/nearby', {
+        params: { latitude, longitude, radius_km: radius, bed_type: bedType },
+        signal,
       }),
       { silent: true }
     );
@@ -66,9 +68,9 @@ class HospitalService {
   /**
    * Get hospital by ID
    */
-  async getById(id: string): Promise<Hospital> {
-    return apiCall<Hospital>(
-      hospitalApi.get(`/hospitals/${id}`),
+  async getById(id: string, signal?: AbortSignal): Promise<Hospital> {
+    return apiCallWithRetry<Hospital>(
+      () => hospitalApi.get(`/hospitals/${id}`, { signal }),
       { silent: true }
     );
   }
@@ -76,9 +78,9 @@ class HospitalService {
   /**
    * Get bed capacity for hospital
    */
-  async getBedCapacity(hospitalId: string): Promise<BedCapacity[]> {
-    const response = await apiCall<{ capacities: BedCapacity[] }>(
-      hospitalApi.get(`/hospitals/${hospitalId}/bed-capacity`),
+  async getBedCapacity(hospitalId: string, signal?: AbortSignal): Promise<BedCapacity[]> {
+    const response = await apiCallWithRetry<{ capacities: BedCapacity[] }>(
+      () => hospitalApi.get(`/hospitals/${hospitalId}/bed-capacity`, { signal }),
       { silent: true }
     );
     return response.capacities;
@@ -106,9 +108,9 @@ class HospitalService {
   /**
    * Get hospital statistics
    */
-  async getStats(): Promise<any> {
-    return apiCall(
-      hospitalApi.get('/hospitals/stats'),
+  async getStats(signal?: AbortSignal): Promise<any> {
+    return apiCallWithRetry(
+      () => hospitalApi.get('/hospitals/stats', { signal }),
       { silent: true }
     );
   }
@@ -116,9 +118,9 @@ class HospitalService {
   /**
    * Get capacity statistics
    */
-  async getCapacityStats(): Promise<any> {
-    return apiCall(
-      hospitalApi.get('/hospitals/capacity-stats'),
+  async getCapacityStats(signal?: AbortSignal): Promise<any> {
+    return apiCallWithRetry(
+      () => hospitalApi.get('/hospitals/capacity-stats', { signal }),
       { silent: true }
     );
   }

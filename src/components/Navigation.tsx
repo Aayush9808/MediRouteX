@@ -15,6 +15,7 @@ import {
 import { useBlood } from '../contexts/BloodContext';
 import { useAuth } from '../contexts/AuthContext';
 import ProfileSettingsModal from './ProfileSettingsModal';
+import { getRoleLabel } from '../utils/roles';
 
 interface NavigationProps {
   isDark: boolean;
@@ -146,7 +147,7 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
             </div>
             <div className="hidden lg:block text-left">
               <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name || 'User'}</p>
-              <p className="text-[10px] text-gray-500 dark:text-gray-400">{user?.role || 'Member'}</p>
+              <p className="text-[10px] text-gray-500 dark:text-gray-400">{getRoleLabel(user?.role) || 'Member'}</p>
             </div>
             <ChevronDown className="w-4 h-4 text-gray-400 hidden lg:block" />
           </motion.button>
