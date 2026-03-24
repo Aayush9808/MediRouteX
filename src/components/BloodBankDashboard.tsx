@@ -1,11 +1,14 @@
-import { Droplets, LogOut } from 'lucide-react';
+import { useState } from 'react';
+import { Droplets, LogOut, Settings } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useBlood } from '../contexts/BloodContext';
 import BloodBankPanel from './BloodBankPanel';
+import ProfileSettingsModal from './ProfileSettingsModal';
 
 export default function BloodBankDashboard() {
   const { user, logout } = useAuth();
   const { alerts } = useBlood();
+  const [showProfileSettings, setShowProfileSettings] = useState(false);
 
   const activeAlerts = alerts.filter((a) => a.status === 'Active').length;
   const criticalAlerts = alerts.filter((a) => a.status === 'Active' && a.urgency === 'Critical').length;
@@ -28,6 +31,13 @@ export default function BloodBankDashboard() {
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">{user?.name}</p>
               <p className="text-xs text-gray-400">Blood Bank</p>
             </div>
+            <button
+              onClick={() => setShowProfileSettings(true)}
+              className="p-2 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+              title="Profile & Settings"
+            >
+              <Settings className="w-4 h-4" />
+            </button>
             <button
               onClick={logout}
               className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
@@ -53,6 +63,8 @@ export default function BloodBankDashboard() {
       <div className="flex-1 overflow-hidden">
         <BloodBankPanel />
       </div>
+
+      <ProfileSettingsModal isOpen={showProfileSettings} onClose={() => setShowProfileSettings(false)} />
     </div>
   );
 }

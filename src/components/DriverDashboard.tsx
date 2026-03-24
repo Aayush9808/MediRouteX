@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Truck, MapPin, AlertTriangle, CheckCircle, Clock,
-  Phone, Navigation, Activity, User, LogOut
+  Phone, Navigation, Activity, User, LogOut, Settings
 } from 'lucide-react';
 import { useEmergency } from '../context/EmergencyContext';
 import { useAuth } from '../contexts/AuthContext';
 import RealMapView from './RealMapView';
+import ProfileSettingsModal from './ProfileSettingsModal';
 import toast from 'react-hot-toast';
 
 export default function DriverDashboard() {
@@ -14,6 +15,7 @@ export default function DriverDashboard() {
   const { user, logout } = useAuth();
   const [driverStatus, setDriverStatus] = useState<'Available' | 'Responding'>('Responding');
   const [activeTab, setActiveTab] = useState<'assignment' | 'navigate' | 'history'>('assignment');
+  const [showProfileSettings, setShowProfileSettings] = useState(false);
 
   // Demo: Use first busy ambulance as the driver's vehicle
   const myAmbulance = ambulances.find(a => a.status === 'Busy') ?? ambulances[0];
@@ -49,6 +51,13 @@ export default function DriverDashboard() {
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">{user?.name}</p>
               <p className="text-xs text-gray-400">Ambulance Driver</p>
             </div>
+            <button
+              onClick={() => setShowProfileSettings(true)}
+              className="p-2 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+              title="Profile & Settings"
+            >
+              <Settings className="w-4 h-4" />
+            </button>
             <button
               onClick={logout}
               className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
@@ -266,6 +275,8 @@ export default function DriverDashboard() {
           </div>
         )}
       </div>
+
+      <ProfileSettingsModal isOpen={showProfileSettings} onClose={() => setShowProfileSettings(false)} />
     </div>
   );
 }

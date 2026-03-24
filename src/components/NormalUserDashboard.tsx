@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, AlertTriangle, Phone, Clock, LogOut, UserRound } from 'lucide-react';
+import { MapPin, AlertTriangle, Phone, Clock, LogOut, UserRound, Settings } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useEmergency } from '../context/EmergencyContext';
 import RealMapView from './RealMapView';
 import EmergencyModal from './EmergencyModal';
+import ProfileSettingsModal from './ProfileSettingsModal';
 
 export default function NormalUserDashboard() {
   const { user, logout } = useAuth();
   const { emergencies } = useEmergency();
   const [showEmergencyModal, setShowEmergencyModal] = useState(false);
+  const [showProfileSettings, setShowProfileSettings] = useState(false);
 
   const myRecentEmergencies = emergencies
     .filter((e) => e.patientName?.toLowerCase().includes(user?.name?.split(' ')[0]?.toLowerCase() || ''))
@@ -25,14 +27,21 @@ export default function NormalUserDashboard() {
             </div>
             <div>
               <h1 className="font-bold text-gray-900 dark:text-white text-lg leading-tight">MediRouteX User Portal</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Citizen Emergency Access</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Requester Portal</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <div className="text-right hidden sm:block">
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">{user?.name}</p>
-              <p className="text-xs text-gray-400">Normal User</p>
+              <p className="text-xs text-gray-400">Requester</p>
             </div>
+            <button
+              onClick={() => setShowProfileSettings(true)}
+              className="p-2 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+              title="Profile & Settings"
+            >
+              <Settings className="w-4 h-4" />
+            </button>
             <button
               onClick={logout}
               className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
@@ -92,6 +101,7 @@ export default function NormalUserDashboard() {
       </div>
 
       <EmergencyModal isOpen={showEmergencyModal} onClose={() => setShowEmergencyModal(false)} />
+      <ProfileSettingsModal isOpen={showProfileSettings} onClose={() => setShowProfileSettings(false)} />
     </div>
   );
 }

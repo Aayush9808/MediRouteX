@@ -43,11 +43,13 @@ class AuthService {
     try {
       const response = await apiCall<AuthResponse>(
         authApi.post('/auth/login', credentials),
-        { successMessage: 'Login successful!', errorMessage: 'Login failed' }
+        { silent: true }
       );
 
       setTokens(response.access_token, response.refresh_token);
       setCurrentUser(response.user);
+      const toast = (await import('react-hot-toast')).default;
+      toast.success('Login successful!');
 
       return response.user;
     } catch (error) {
@@ -125,6 +127,7 @@ class AuthService {
       }
 
       // If wrong credentials, throw error
+      toast.error('Invalid credentials');
       throw new Error('Invalid credentials');
     }
   }

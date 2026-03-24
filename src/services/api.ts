@@ -8,12 +8,12 @@ import toast from 'react-hot-toast';
 
 // API Base URLs
 export const API_CONFIG = {
-  EMERGENCY_SERVICE: 'http://localhost:5001/api/v1',
-  AMBULANCE_SERVICE: 'http://localhost:5002/api/v1',
-  HOSPITAL_SERVICE: 'http://localhost:5003/api/v1',
-  AUTH_SERVICE: 'http://localhost:5004/api/v1',
-  ROUTING_SERVICE: 'http://localhost:5005/api/v1',
-  ML_SERVICE: 'http://localhost:5006/api/v1',
+  EMERGENCY_SERVICE: import.meta.env.VITE_EMERGENCY_SERVICE_URL || 'http://localhost:5001/api/v1',
+  AMBULANCE_SERVICE: import.meta.env.VITE_AMBULANCE_SERVICE_URL || 'http://localhost:5002/api/v1',
+  HOSPITAL_SERVICE: import.meta.env.VITE_HOSPITAL_SERVICE_URL || 'http://localhost:5003/api/v1',
+  AUTH_SERVICE: import.meta.env.VITE_AUTH_SERVICE_URL || 'http://localhost:5004/api/v1',
+  ROUTING_SERVICE: import.meta.env.VITE_ROUTING_SERVICE_URL || 'http://localhost:5005/api/v1',
+  ML_SERVICE: import.meta.env.VITE_ML_SERVICE_URL || 'http://localhost:5006/api/v1',
 };
 
 // Token management
@@ -105,7 +105,7 @@ const createApiClient = (baseURL: string): AxiosInstance => {
         } catch (refreshError) {
           // Refresh failed - logout user
           clearTokens();
-          window.location.href = '/login';
+          window.location.href = '/';
           toast.error('Session expired. Please login again.');
           return Promise.reject(refreshError);
         }
@@ -116,7 +116,16 @@ const createApiClient = (baseURL: string): AxiosInstance => {
       const errorMessage = responseData?.error || responseData?.message || error.message || 'An error occurred';
       
       // Don't show toast for certain routes (like initial data fetching)
-      if (!originalRequest.url?.includes('/health')) {
+      const isNetworkIssue = !error.response;
+      const shouldSilence =
+        isNetworkIssue ||
+        originalRequest.url?.includes('/auth/login') ||
+        originalRequest.url?.includes('/health') ||
+        originalRequest.url?.includes('/active') ||
+        originalRequest.url?.includes('/ambulance') ||
+        originalRequest.url?.includes('/hospitals');
+
+      if (!shouldSilence) {
         toast.error(errorMessage);
       }
 

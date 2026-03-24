@@ -13,6 +13,8 @@ import {
   Droplets
 } from 'lucide-react';
 import { useBlood } from '../contexts/BloodContext';
+import { useAuth } from '../contexts/AuthContext';
+import ProfileSettingsModal from './ProfileSettingsModal';
 
 interface NavigationProps {
   isDark: boolean;
@@ -24,8 +26,10 @@ interface NavigationProps {
 export default function Navigation({ isDark, onToggleTheme, activePanel, onToggleBloodPanel }: NavigationProps) {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfileSettings, setShowProfileSettings] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { activeAlerts } = useBlood();
+  const { user, logout } = useAuth();
   const [notifications] = useState([
     { id: 1, text: 'New emergency in Lajpat Nagar', time: '2 min ago' },
     { id: 2, text: 'Ambulance DL-01 available', time: '5 min ago' },
@@ -138,11 +142,11 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
             className="flex items-center gap-3 p-1.5 pr-4 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-white font-semibold text-sm">
-              JD
+              {(user?.name || 'U').slice(0, 2).toUpperCase()}
             </div>
             <div className="hidden lg:block text-left">
-              <p className="text-sm font-medium text-gray-900 dark:text-white">John Doe</p>
-              <p className="text-[10px] text-gray-500 dark:text-gray-400">Emergency Coord.</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name || 'User'}</p>
+              <p className="text-[10px] text-gray-500 dark:text-gray-400">{user?.role || 'Member'}</p>
             </div>
             <ChevronDown className="w-4 h-4 text-gray-400 hidden lg:block" />
           </motion.button>
@@ -156,19 +160,34 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
                 className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
               >
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                  <p className="font-medium text-gray-900 dark:text-white">John Doe</p>
-                  <p className="text-sm text-gray-500">john.doe@mediroutex.in</p>
+                  <p className="font-medium text-gray-900 dark:text-white">{user?.name || 'User'}</p>
+                  <p className="text-sm text-gray-500">{user?.email || ''}</p>
                 </div>
                 <div className="p-2">
-                  <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                  <button
+                    onClick={() => {
+                      setShowProfileSettings(true);
+                      setShowUserMenu(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
                     <User className="w-4 h-4" />
                     <span className="text-sm">Profile</span>
                   </button>
-                  <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                  <button
+                    onClick={() => {
+                      setShowProfileSettings(true);
+                      setShowUserMenu(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
                     <Settings className="w-4 h-4" />
                     <span className="text-sm">Settings</span>
                   </button>
-                  <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                  <button
+                    onClick={logout}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  >
                     <LogOut className="w-4 h-4" />
                     <span className="text-sm">Sign Out</span>
                   </button>
@@ -178,6 +197,8 @@ export default function Navigation({ isDark, onToggleTheme, activePanel, onToggl
           </AnimatePresence>
         </div>
       </div>
+
+      <ProfileSettingsModal isOpen={showProfileSettings} onClose={() => setShowProfileSettings(false)} />
     </nav>
   );
 }

@@ -2,17 +2,19 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   AlertTriangle, MapPin, Activity, Clock, Phone,
-  CheckCircle, Navigation, LogOut, Ambulance, Building2
+  CheckCircle, Navigation, LogOut, Ambulance, Building2, Settings
 } from 'lucide-react';
 import { useEmergency } from '../context/EmergencyContext';
 import { useAuth } from '../contexts/AuthContext';
 import EmergencyModal from './EmergencyModal';
 import RealMapView from './RealMapView';
+import ProfileSettingsModal from './ProfileSettingsModal';
 
 export default function PatientDashboard() {
   const { emergencies, hospitals, ambulances } = useEmergency();
   const { user, logout } = useAuth();
   const [showModal, setShowModal] = useState(false);
+  const [showProfileSettings, setShowProfileSettings] = useState(false);
   const [activeTab, setActiveTab] = useState<'status' | 'hospitals' | 'map'>('status');
 
   const availableAmbulances = ambulances.filter(a => a.status === 'Available').length;
@@ -47,6 +49,13 @@ export default function PatientDashboard() {
               <p className="text-xs text-gray-400">Patient</p>
             </div>
             <button
+              onClick={() => setShowProfileSettings(true)}
+              className="p-2 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+              title="Profile & Settings"
+            >
+              <Settings className="w-4 h-4" />
+            </button>
+            <button
               onClick={logout}
               className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
               title="Logout"
@@ -66,6 +75,7 @@ export default function PatientDashboard() {
           className="w-full py-5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black text-xl rounded-2xl shadow-xl shadow-red-500/40 flex items-center justify-center gap-4 transition-all"
         >
           <AlertTriangle className="w-8 h-8" />
+              <ProfileSettingsModal isOpen={showProfileSettings} onClose={() => setShowProfileSettings(false)} />
           🚨 REQUEST EMERGENCY AMBULANCE
         </motion.button>
         <div className="flex items-center justify-center gap-4 mt-2">
